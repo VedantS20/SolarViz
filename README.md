@@ -3,7 +3,7 @@
 <p align="center">
   <h3 align="center">Solar Data Visualizer</h3>
   <p align="center">
-    <a href="https://github.com/othneildrew/Best-README-Template"><strong>Explore the Website »</strong></a>
+    <a href="#"><strong>Explore the Website »</strong></a>
   </p>
 </p>
 
@@ -51,9 +51,9 @@ login with the Credentials <br>
 **username** - solar<br>
 **password** - abcd@1234
 
-![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Login Page")
+![Login Page](<https://github.com/VedantS20/SolarViz/blob/main/loginpage%20(2).png> "Login Page")
 
-![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Total Energy Genration and location")
+![Map](<https://github.com/VedantS20/SolarViz/blob/main/sv1%20(2).png> "Total Energy Genration and location")
 
 **STEP 2**
 
@@ -61,4 +61,4 @@ login with the Credentials <br>
 - Select the device from the Dropdown
 - Select the Parameters
 
-![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Charts")
+![Chart](<https://github.com/VedantS20/SolarViz/blob/main/sv2%20(2).png> "Charts")
