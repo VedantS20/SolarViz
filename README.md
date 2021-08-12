@@ -25,9 +25,7 @@
 
 ## About The Project
 
-Among all the benefits of solar panels, the most important thing is that solar energy is a truly renewable energy source.<br> It can be harnessed in all areas of the world and is available every day.<br> We cannot run out of solar energy, unlike some of the other sources of energy.
-
-Features:
+**Features**:
 
 - We Can Visualize Energy Genration From Each Solar Panal in Realtime
 - Visualizing the Historic Energy Genration of a Perticular Date and Time
