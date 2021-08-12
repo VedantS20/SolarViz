@@ -1,0 +1,1311 @@
+{% extends "layouts/base.html" %}
+{% block title %} Charts {% endblock title %}
+
+<!-- Specific CSS goes HERE  -->
+{% block stylesheets %}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Add icon library -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+          integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/css/tempusdominus-bootstrap-4.min.css"
+          integrity="sha512-PMjWzHVtwxdq7m7GIxBot5vdxUY+5aKP9wpKtvnNBZrVv1srI8tU6xvFMzG8crLNcMj/8Xl/WWmo/oAP/40p1g=="
+          crossorigin="anonymous"/>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+    <style>
+        :root {
+            --text: "Select values";
+        }
+
+        .multiple_select {
+            height: 31.4px;
+            width: auto;
+            overflow: hidden;
+            -webkit-appearance: menulist;
+            position: absolute;
+            margin-left: 5px;
+        }
+
+        .multiple_select::before {
+            content: var(--text);
+            display: block;
+            margin-left: 5px;
+            margin-bottom: 2px;
+            margin-right: 5px;
+        }
+
+        .multiple_select_active {
+            overflow: visible !important;
+        }
+
+        .multiple_select option {
+            display: none;
+            height: 30px;
+            background-color: white;
+        }
+
+        .multiple_select_active option {
+            display: block;
+        }
+
+        .multiple_select option::before {
+            content: "\2610";
+        }
+
+        .multiple_select option:checked::before {
+            content: "\2611";
+        }
+    </style>
+    <style>
+        select {
+
+            /* styling */
+            background-color: white;
+            border: thin solid blue;
+            border-radius: 4px;
+            display: inline-block;
+            font: inherit;
+            line-height: 1.5em;
+            padding-right: 3.5em;
+            padding-left: 1em;
+            padding-top: 0.1em;
+            /* reset */
+
+            margin: 0;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+
+
+        /* arrows */
+
+        select.classic {
+            background-image: linear-gradient(45deg, transparent 50%, blue 50%),
+            linear-gradient(135deg, blue 50%, transparent 50%),
+            linear-gradient(to right, skyblue, skyblue);
+            background-position: calc(100% - 20px) calc(1em + 2px),
+            calc(100% - 15px) calc(1em + 2px),
+            100% 0;
+            background-size: 5px 5px,
+            5px 5px,
+            2.5em 2.5em;
+            background-repeat: no-repeat;
+        }
+
+        select.classic:focus {
+            background-image: linear-gradient(45deg, white 50%, transparent 50%),
+            linear-gradient(135deg, transparent 50%, white 50%),
+            linear-gradient(to right, gray, gray);
+            background-position: calc(100% - 15px) 1em,
+            calc(100% - 20px) 1em,
+            100% 0;
+            background-size: 5px 5px,
+            5px 5px,
+            2.5em 2.5em;
+            background-repeat: no-repeat;
+            border-color: grey;
+            outline: 0;
+        }
+
+
+        select.round {
+            background-image: linear-gradient(45deg, transparent 50%, gray 50%),
+            linear-gradient(135deg, gray 50%, transparent 50%),
+            radial-gradient(#ddd 70%, transparent 72%);
+            background-position: calc(100% - 20px) calc(1em + 2px),
+            calc(100% - 15px) calc(1em + 2px),
+            calc(100% - .5em) .5em;
+            background-size: 5px 5px,
+            5px 5px,
+            1.5em 1.5em;
+            background-repeat: no-repeat;
+        }
+
+        select.round:focus {
+            background-image: linear-gradient(45deg, white 50%, transparent 50%),
+            linear-gradient(135deg, transparent 50%, white 50%),
+            radial-gradient(gray 70%, transparent 72%);
+            background-position: calc(100% - 15px) 1em,
+            calc(100% - 20px) 1em,
+            calc(100% - .5em) .5em;
+            background-size: 5px 5px,
+            5px 5px,
+            1.5em 1.5em;
+            background-repeat: no-repeat;
+            border-color: green;
+            outline: 0;
+        }
+
+
+        select.minimal {
+            background-image: linear-gradient(45deg, transparent 50%, gray 50%),
+            linear-gradient(135deg, gray 50%, transparent 50%),
+            linear-gradient(to right, #ccc, #ccc);
+            background-position: calc(100% - 20px) calc(1em + 2px),
+            calc(100% - 15px) calc(1em + 2px),
+            calc(100% - 2.5em) 0.5em;
+            background-size: 5px 5px,
+            5px 5px,
+            1px 1.5em;
+            background-repeat: no-repeat;
+        }
+
+        select.minimal:focus {
+            background-image: linear-gradient(45deg, green 50%, transparent 50%),
+            linear-gradient(135deg, transparent 50%, green 50%),
+            linear-gradient(to right, #ccc, #ccc);
+            background-position: calc(100% - 15px) 1em,
+            calc(100% - 20px) 1em,
+            calc(100% - 2.5em) 0.5em;
+            background-size: 5px 5px,
+            5px 5px,
+            1px 1.5em;
+            background-repeat: no-repeat;
+            border-color: green;
+            outline: 0;
+        }
+
+
+        select:-moz-focusring {
+            color: transparent;
+            text-shadow: 0 0 0 #000;
+        }
+
+
+    </style>
+{% endblock stylesheets %}
+
+{% block content %}
+    <div class="row gap-20 masonry pos-r">
+        <div class="masonry-item col-md-12">
+            <div class="p-20 mx-auto row" style="background-color: #313131;">
+                <div class=" col-sm-5 d-inline-block">
+                    <div class=" input-group date" id="datetimepicker1" data-target-input="nearest">
+                        <input type="text" id="fromdata" class="form-control datetimepicker-input"
+                               data-target="#datetimepicker1">
+                        <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-5 d-inline-block">
+                    <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
+                        <input type="text" id="todata" class="form-control datetimepicker-input"
+                               data-target="#datetimepicker2">
+                        <div class="input-group-append" data-target="#datetimepicker2" data-toggle="datetimepicker">
+                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-inline-block p-0 m-0">
+                    <button type="button" class="btn btn-primary mb-1 mr-2" onclick="get_archive_data()"><i
+                            class="fa fa-search"></i></button>
+                    <button type="button" class="btn btn-primary mb-1 " onclick="refreshdata()"><i
+                            class="fa fa-refresh"></i></button>
+                    {#                    <button type="button" class="btn btn-primary mb-1 " onclick="showcanvas()"><i#}
+                    {#                            class="fa fa-plus"></i></button>#}
+                    {#                    <button type="button" class="btn btn-secondary mb-1 mr-2" onclick="chart.destroy()">Destroy!!#}
+                    {#                    </button>#}
+                </div>
+            </div>
+        </div>
+        <div class="masonry-sizer col-md-6 pos-a"></div>
+        <div class="masonry-item col-md-12">
+            <div class="p-20 bd" style="background-color: #313131;">
+                <select class="form-control col-md-1 d-inline-block" id="exampleFormControlSelect1">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </select>
+                <select id="myFilter" class="multiple_select minimal" multiple>
+                    <option>VIN</option>
+                    <option>VBAT</option>
+                    <option>SPDK</option>
+                    <option>TP</option>
+                    <option>APPD</option>
+                    <option>CELV</option>
+                    <option>ES</option>
+                    <option>ECT</option>
+                </select>
+                <div id="line-chart" style="display: none;"></div>
+                <div class="mT-30">
+                    <canvas id="scatter-chart" height="100" style="display: block;margin-top: 10px;">
+                    </canvas>
+                </div>
+            </div>
+        </div>
+
+        {#        <div class="masonry-item col-md-12">#}
+        {#            <div class="p-20 bd" style="background-color: #313131;">#}
+        {#                <h6 class="" style="color: white;">APPD vs TP</h6>#}
+        {#                <div class="mT-30">#}
+        {#                    <div id="line-chart" style="height: auto; width: 1100px;"></div>#}
+        {#                </div>#}
+        {#            </div>#}
+        {#        </div>#}
+
+        {#        <div class="masonry-item col-md-12">#}
+        {#            <div class="p-20 bd" style="background-color: #313131;">#}
+        {#                <p>#}
+        {#                                        <button id="addDataset" onclick="addDatasets1()">Add Dataset</button>#}
+        {#                                        <button id="removeDataset" onclick="removeDatasets()">Remove Dataset</button>#}
+        {#                    <select id="myFilter" class="multiple_select minimal" multiple>#}
+        {#                        <option>VIN</option>#}
+        {#                        <option>VBAT</option>#}
+        {#                        <option>SPDK</option>#}
+        {#                        <option>TP</option>#}
+        {#                        <option>APPD</option>#}
+        {#                        <option>CELV</option>#}
+        {#                        <option>ES</option>#}
+        {#                        <option>ECT</option>#}
+        {#                    </select>#}
+        {#                </p>#}
+        {##}
+        {#                <h6 class="c-grey-900">Scatter Chart</h6>#}
+        {#                <div class="mT-30">#}
+        {#                    <canvas id="scatter-chart" height="100">#}
+        {#                    </canvas>#}
+        {#                </div>#}
+        {#            </div>#}
+        {#        </div>#}
+        <div class="masonry-item col-md-6">
+            <div class="p-20 bd" style="background-color: #313131;">
+                <h6 class="c-grey-900">Bar Chart</h6>
+                <div class="mT-30">
+                    {#                    <canvas id="bar-chart" height="220"></canvas>#}
+                    <div id="bar"></div>
+                </div>
+            </div>
+        </div>
+        <div class="masonry-item col-md-6">
+            <div class="p-20 bd" style="background-color: #313131;">
+                <h6 class="c-grey-900">jQuery Sparkline</h6>
+                <div class="mT-30">
+                    <div class="peers ai-c jc-sb fxw-nw bdB pY-15">
+                        <div class="peer">
+                            <span>Spark Line</span>
+                        </div>
+                        <div class="peer">
+                            <span class="sparkline">&nbsp;</span>
+                        </div>
+                    </div>
+                    <div class="peers ai-c jc-sb fxw-nw bdB pY-15">
+                        <div class="peer">
+                            <span>Spark Bar</span>
+                        </div>
+                        <div class="peer">
+                            <span class="sparkbar">&nbsp;</span>
+                        </div>
+                    </div>
+                    <div class="peers ai-c jc-sb fxw-nw bdB pY-15">
+                        <div class="peer">
+                            <span>Spark Tristate</span>
+                        </div>
+                        <div class="peer">
+                            <span class="sparktri">&nbsp;</span>
+                        </div>
+                    </div>
+                    <div class="peers ai-c jc-sb fxw-nw bdB pY-15">
+                        <div class="peer">
+                            <span>Spark Discrete</span>
+                        </div>
+                        <div class="peer">
+                            <span class="sparkdisc">&nbsp;</span>
+                        </div>
+                    </div>
+                    <div class="peers ai-c jc-sb fxw-nw bdB pY-15">
+                        <div class="peer">
+                            <span>Spark Bullet</span>
+                        </div>
+                        <div class="peer">
+                            <span class="sparkbull">&nbsp;</span>
+                        </div>
+                    </div>
+                    <div class="peers ai-c jc-sb fxw-nw pT-15">
+                        <div class="peer">
+                            <span>Spark Box</span>
+                        </div>
+                        <div class="peer">
+                            <span class="sparkbox">&nbsp;</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="masonry-item col-md-6">
+            <div class="p-20 bd" style="background-color: #313131;">
+                <h6 class="c-grey-900">Easy Pie Charts</h6>
+                <div class="mT-30">
+                    <div class="peers mT-20 fxw-nw@lg+ jc-sb ta-c gap-10">
+                        <div class="peer">
+                            <div class="easy-pie-chart" data-size="80" data-percent="75" data-bar-color="#f44336">
+                                <span></span>
+                            </div>
+                            <h6 class="fsz-sm">New Users</h6>
+                        </div>
+                        <div class="peer">
+                            <div class="easy-pie-chart" data-size="80" data-percent="50" data-bar-color="#2196f3">
+                                <span></span>
+                            </div>
+                            <h6 class="fsz-sm">New Purchases</h6>
+                        </div>
+                        <div class="peer">
+                            <div class="easy-pie-chart" data-size="80" data-percent="65" data-bar-color="#f44336">
+                                <span></span>
+                            </div>
+                            <h6 class="fsz-sm">New Customers</h6>
+                        </div>
+                        <div class="peer">
+                            <div class="easy-pie-chart" data-size="80" data-percent="90" data-bar-color="#ff9800">
+                                <span></span>
+                            </div>
+                            <h6 class="fsz-sm">Bounce Rate</h6>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+{% endblock content %}
+{% block javascripts %}
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-crosshair@1"></script>
+    {#    <script>#}
+    {#        var ctx = document.getElementById('area-chart').getContext('2d');#}
+    {#        var searchchart = {#}
+    {#            type: 'line',#}
+    {#            data: {#}
+    {#                labels: [],#}
+    {#                datasets: [#}
+    {#                    {#}
+    {#                        label: 'Vin',#}
+    {#                        borderWidth: 1.5,#}
+    {#                        //backgroundColor:"rgba(255,79,0,0.5)",#}
+    {#                        borderColor: "rgb(255,103,0)",#}
+    {#                        yAxisID: 'yaxis1',#}
+    {#                        data: [],#}
+    {#                        fill: "false",#}
+    {#                        pointStyle: 'line'#}
+    {#                    },#}
+    {#                    {#}
+    {#                        label: 'VBat',#}
+    {#                        //backgroundColor:"rgba(191,0,255,0.5)",#}
+    {#                        borderColor: "rgb(57,255,20)",#}
+    {#                        pointBackgroundColor: "#880085",#}
+    {#                        borderWidth: 1.5,#}
+    {#                        yAxisID: 'yaxis2',#}
+    {#                        data: [],#}
+    {#                        fill: "false",#}
+    {#                        pointStyle: 'line'#}
+    {#                    }#}
+    {#                ]#}
+    {#            },#}
+    {#            options: {#}
+    {#                legend: {#}
+    {#                    display: true,#}
+    {#                    align: 'center',#}
+    {#                    labels: {#}
+    {#                        usePointStyle: true,#}
+    {#                        boxWidth: 10,#}
+    {#                        fontColor: '#fff',#}
+    {#                        lineCap: 'butt',#}
+    {#                    }#}
+    {#                },#}
+    {#                responsive: true,#}
+    {#                elements: {#}
+    {#                    point: {#}
+    {#                        radius: 1#}
+    {#                    }#}
+    {#                },#}
+    {#                tooltips: {#}
+    {#                    mode: 'interpolate',#}
+    {#                    intersect: false#}
+    {#                },#}
+    {#                plugins: {#}
+    {#                    crosshair: {#}
+    {#                        line: {#}
+    {#                            color: '#F66',        // crosshair line color#}
+    {#                            width: 1,             // crosshair line width#}
+    {#                            dashPattern: [5, 5]   // crosshair line dash pattern#}
+    {#                        },#}
+    {#                        sync: {#}
+    {#                            enabled: false,            // enable trace line syncing with other charts#}
+    {#                            group: 1,                 // chart group#}
+    {#                            suppressTooltips: false   // suppress tooltips when showing a synced tracer#}
+    {#                        },#}
+    {#                        zoom: {#}
+    {#                            enabled: true,                                      // enable zooming#}
+    {#                            zoomboxBackgroundColor: 'rgba(66,133,244,0.2)',     // background color of zoom box#}
+    {#                            zoomboxBorderColor: '#48F',                         // border color of zoom box#}
+    {#                            zoomButtonText: 'Reset Zoom',                       // reset zoom button text#}
+    {#                            zoomButtonClass: 'reset-zoom',                      // reset zoom button class#}
+    {#                        },#}
+    {#                        callbacks: {#}
+    {#                            beforeZoom: function (start, end) {#}
+    {##}
+    {#                                console.log(start + " " + end)// called before zoom, return false to prevent zoom#}
+    {#                                return true;#}
+    {#                            },#}
+    {#                            afterZoom: function (start, end) {#}
+    {##}
+    {#                                chart.data.datasets[0].data = Zoomobj.Vin#}
+    {#                                chart.data.datasets[1].data = Zoomobj.Vbat#}
+    {##}
+    {#                            }#}
+    {##}
+    {#                        }#}
+    {#                    }#}
+    {#                },#}
+    {#                scales: {#}
+    {#                    xAxes: [{#}
+    {#                        gridLines: {color: "#696969"},#}
+    {#                        type: 'time',#}
+    {#                        distribution: 'linear',#}
+    {#                        time: {#}
+    {#                            displayFormats: {#}
+    {#                                hour: "MMM D ha"#}
+    {##}
+    {#                            }#}
+    {#                        },#}
+    {#                        ticks: {#}
+    {#                            fontColor: "white",#}
+    {#                            maxTicksLimit: 12,#}
+    {#                        }#}
+    {#                    }],#}
+    {#                    yAxes: [#}
+    {#                        {#}
+    {#                            id: 'yaxis1',#}
+    {#                            gridLines: {color: "#696969"},#}
+    {#                            ticks: {#}
+    {#                                fontColor: "white"#}
+    {#                            }#}
+    {#                        },#}
+    {#                        {#}
+    {#                            id: 'yaxis2',#}
+    {#                            position: 'right',#}
+    {#                            gridLines: {color: "#696969"},#}
+    {#                            ticks: {#}
+    {#                                fontColor: "white"#}
+    {#                            }#}
+    {#                        }]#}
+    {#                }#}
+    {#            },#}
+    {#        }#}
+    {#        var chart = new Chart(ctx, searchchart);#}
+    {##}
+    {#        function refreshdata() {#}
+    {#            archive = false#}
+    {#            var x = document.getElementById("scatter-chart");#}
+    {#            var y = document.getElementById("area-chart");#}
+    {#            if (x.style.display === "none") {#}
+    {#                x.style.display = "block"#}
+    {#                y.style.display = "none"#}
+    {#            } else {#}
+    {#                x.style.display = "block"#}
+    {#            }#}
+    {#        }#}
+    {##}
+    {##}
+    {#function showcanvas() {#}
+    {#    console.log('clicked')#}
+    {#    var x = document.getElementById("scatter-chart");#}
+    {#    var y = document.getElementById("area-chart");#}
+    {#    if (x.style.display === "none" && y.style.display === "block") {#}
+    {#        x.style.display = "block";#}
+    {#        y.style.display = "none";#}
+    {#    } else {#}
+    {#        x.style.display = "none";#}
+    {#        y.style.display = "block";#}
+    {#    }#}
+    {#}#}
+    {##}
+    {#            function search(Result) {#}
+    {#                chart.data.datasets[0].data = Result.Vin#}
+    {#                chart.data.datasets[1].data = Result.Vbat#}
+    {#                chart.data.labels = Result.labels#}
+    {#                chart.update()#}
+    {#            }#}
+    {##}
+    {#            var Zoomobj = undefined#}
+    {##}
+    {##}
+    {#            function start() {#}
+    {#                console.log("start")#}
+    {#                var currentTime = new Date();#}
+    {#                console.log(currentTime)#}
+    {#                for (var i = 30; i >= 0; i--) {#}
+    {#                    var time = new Date(currentTime - i * 1000);#}
+    {#                    chart.data.labels.push(time)#}
+    {#chart1.data.labels.push(time)#}
+    {#                    console.log(chart.data.datasets.length)#}
+    {#                    chart.data.datasets.forEach(function (dataset) {#}
+    {#                        dataset.data.push({#}
+    {#                            y: undefined,#}
+    {#                            x: time#}
+    {#                        })#}
+    {#                    })#}
+    {#chart.data.datasets[0].data.push(undefined)#}
+    {#chart.data.datasets[1].data.push(undefined)#}
+    {#chart.data.datasets[2].data.push(undefined)#}
+    {##}
+    {#chart1.data.datasets[0].data.push(undefined)#}
+    {#chart1.data.datasets[1].data.push(undefined)#}
+    {##}
+    {#                }#}
+    {#                chart.update();#}
+    {#chart1.update();#}
+    {#                clr = setInterval(livedata, 500);#}
+    {#            }#}
+    {#    </script>#}
+    {#    <script>#}
+    {#        var ctx = document.getElementById('line-chart').getContext('2d');#}
+    {#        //document.getElementById('line-chart').height = 100;#}
+    {#        var chart1 = new Chart(ctx, {#}
+    {#            type: 'line',#}
+    {#            data: {#}
+    {#                labels: [],#}
+    {#                datasets: [{#}
+    {#                    label: 'APPD',#}
+    {#                    borderWidth: 1.5,#}
+    {#                    //backgroundColor:"rgba(255,79,0,0.5)",#}
+    {#                    borderColor: "rgb(255,103,0)",#}
+    {#                    yAxisID: 'yaxis1',#}
+    {#                    data: [],#}
+    {#                    fill: "false",#}
+    {#                    pointStyle: 'line'#}
+    {#                },#}
+    {#                    {#}
+    {#                        label: 'TP',#}
+    {#                        //backgroundColor:"rgba(191,0,255,0.5)",#}
+    {#                        borderColor: "rgb(57,255,20)",#}
+    {#                        pointBackgroundColor: "#880085",#}
+    {#                        borderWidth: 1.5,#}
+    {#                        yAxisID: 'yaxis2',#}
+    {#                        data: [],#}
+    {#                        fill: "false",#}
+    {#                        pointStyle: 'line'#}
+    {#                    }#}
+    {#                ]#}
+    {#            },#}
+    {#            options: {#}
+    {#                legend: {#}
+    {#                    display: true,#}
+    {#                    align: 'center',#}
+    {#                    labels: {#}
+    {#                        usePointStyle: true,#}
+    {#                        boxWidth: 10,#}
+    {#                        fontColor: '#fff',#}
+    {#                        lineCap: 'butt',#}
+    {#                    }#}
+    {#                },#}
+    {#                responsive: true,#}
+    {#                elements: {#}
+    {#                    point: {#}
+    {#                        radius: 1#}
+    {#                    }#}
+    {#                },#}
+    {#                tooltips: {#}
+    {#                    mode: 'nearest',#}
+    {#                    intersect: true#}
+    {#                },#}
+    {#                scales: {#}
+    {#                    xAxes: [{#}
+    {#                        type: 'time',#}
+    {#                        time: {#}
+    {#                            displayFormats: {#}
+    {#                                hour: "MMM D ha"#}
+    {##}
+    {#                            }#}
+    {#                        },#}
+    {#                        gridLines: {color: "#696969"},#}
+    {#                        ticks: {#}
+    {#                            fontColor: "white",#}
+    {#                            maxTicksLimit: 12,#}
+    {#                        }#}
+    {#                    }],#}
+    {#                    yAxes: [#}
+    {#                        {#}
+    {#                            id: 'yaxis1',#}
+    {#                            gridLines: {color: "#696969"},#}
+    {#                            ticks: {#}
+    {#                                fontColor: "white"#}
+    {#                            }#}
+    {#                        },#}
+    {#                        {#}
+    {#                            id: 'yaxis2',#}
+    {#                            position: 'right',#}
+    {#                            gridLines: {color: "#696969"},#}
+    {#                            ticks: {#}
+    {#                                fontColor: "white"#}
+    {#                            }#}
+    {#                        }]#}
+    {#                },#}
+    {#                plugins: {#}
+    {#                    crosshair: {#}
+    {#                        line: {#}
+    {#                            color: '#F66',        // crosshair line color#}
+    {#                            width: 1,             // crosshair line width#}
+    {#                            dashPattern: [5, 5]   // crosshair line dash pattern#}
+    {#                        },#}
+    {#                        sync: {#}
+    {#                            enabled: false,            // enable trace line syncing with other charts#}
+    {#                            group: 1,                 // chart group#}
+    {#                            suppressTooltips: false   // suppress tooltips when showing a synced tracer#}
+    {#                        },#}
+    {#                        zoom: {#}
+    {#                            enabled: true,                                      // enable zooming#}
+    {#                            zoomboxBackgroundColor: 'rgba(66,133,244,0.2)',     // background color of zoom box#}
+    {#                            zoomboxBorderColor: '#48F',                         // border color of zoom box#}
+    {#                            zoomButtonText: 'Reset Zoom',                       // reset zoom button text#}
+    {#                            zoomButtonClass: 'reset-zoom',                      // reset zoom button class#}
+    {#                        },#}
+    {#                        callbacks: {#}
+    {#                            beforeZoom: function (start, end) {#}
+    {##}
+    {#                                console.log(start + " " + end)// called before zoom, return false to prevent zoom#}
+    {#                                return true;#}
+    {#                            },#}
+    {#                            afterZoom: function (start, end) {#}
+    {#                                if (archive === true) {#}
+    {#                                    chart1.data.datasets[0].data = Zoomobj.appd#}
+    {#                                    chart1.data.datasets[1].data = Zoomobj.tp#}
+    {#                                }#}
+    {#                            }#}
+    {#                        }#}
+    {#                    }#}
+    {#                }#}
+    {#            }#}
+    {#        });#}
+    {##}
+    {#        function search1(Result1) {#}
+    {##}
+    {#            chart1.data.datasets[0].data = Result1.Appd#}
+    {#            chart1.data.datasets[1].data = Result1.Tp#}
+    {#            chart1.data.labels = Result1.labels#}
+    {#            chart1.update()#}
+    {##}
+    {#        }#}
+    {##}
+    {##}
+    {#        function addData1(data1) {#}
+    {#            chart1.data.labels.push(data1.time)#}
+    {#            chart1.data.datasets[0].data.push(data1.appd)#}
+    {#            chart1.data.datasets[1].data.push(data1.tp)#}
+    {#            chart1.update()#}
+    {#        }#}
+    {##}
+    {#        function removedata1() {#}
+    {#            chart1.data.datasets[0].data.shift()#}
+    {#            chart1.data.labels.shift()#}
+    {#            chart1.data.datasets[1].data.shift()#}
+    {#            chart1.update()#}
+    {#        }#}
+    {##}
+    {##}
+    {#        function live1() {#}
+    {#            chart1.data.labels = []#}
+    {#            chart1.data.datasets[0].data = []#}
+    {#            chart1.data.datasets[1].data = []#}
+    {#        }#}
+    {##}
+    {#        function checkTime(i) {#}
+    {#            if (i < 10) {#}
+    {#                i = "0" + i;#}
+    {#            }#}
+    {#            return i;#}
+    {#        }#}
+    {##}
+    {#        function converter(time) {#}
+    {#            var h = time.getHours();#}
+    {#            var m = time.getMinutes();#}
+    {#            var s = time.getSeconds();#}
+    {#            // add a zero in front of numbers<10#}
+    {#            h = checkTime(h);#}
+    {#            m = checkTime(m);#}
+    {#            s = checkTime(s);#}
+    {#            var time = h + ":" + m + ":" + s#}
+    {#            return time#}
+    {#        }#}
+    {#    </script>#}
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"
+            integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ=="
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/js/tempusdominus-bootstrap-4.min.js"
+            integrity="sha512-2JBCbWoMJPH+Uj7Wq5OLub8E5edWHlTM4ar/YJkZh3plwB2INhhOC3eDoqHm1Za/ZOSksrLlURLoyXVdfQXqwg=="
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.1/bootbox.min.js"
+            integrity="sha512-eoo3vw71DUo5NRvDXP/26LFXjSFE1n5GQ+jZJhHz+oOTR4Bwt7QBCjsgGvuVMQUMMMqeEvKrQrNEI4xQMXp3uA=="
+            crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('#datetimepicker1').datetimepicker({
+                format: 'YYYY-MM-DD HH:mm:ss',
+            });
+        });
+        $(function () {
+            $('#datetimepicker2').datetimepicker({
+                format: 'YYYY-MM-DD HH:mm:ss',
+            });
+        });
+    </script>
+    <script>
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        const csrftoken = getCookie('csrftoken');
+    </script>
+    {#    <script>#}
+    {#        start()#}
+    {#    </script>#}
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.24.0/min/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-streaming@1.8.0"></script>
+
+    <script>
+        var oldrno = -1;
+        var clr = 0
+        var VIN, VBAT, TIME, TP, APPD, CELV, ES, ECT, SPDK
+
+        function livedata() {
+            $.ajax({
+                method: "GET",
+                url: 'api/data/live',
+                success: function (data) {
+                    if (data.data[1].rno !== oldrno) {
+                        //  addData(data.data[1]);
+                        {#addData1(data.data[1]);#}
+                        VIN = data.data[1].vin
+                        VBAT = data.data[1].vbat
+                        TP = data.data[1].tp
+                        APPD = data.data[1].appd
+                        CELV = data.data[1].celv
+                        ES = data.data[1].es
+                        ECT = data.data[1].ect
+                        SPDK = data.data[1].spdk
+                        TIME = data.data[1].time
+                        oldrno = data.data[1].rno;
+                    }
+                    //if (chart.data.labels.length >= 30) {
+                    //removedata();
+                    {#removedata1()#}
+                    //}
+                },
+                error: function (error_data) {
+                    console.log("error")
+                    console.log(error_data)
+                }
+            })
+        }
+
+        setInterval(livedata, 500)
+        var chartColors = {
+            red: 'rgb(255, 99, 132)',
+            orange: 'rgb(255, 159, 64)',
+            yellow: 'rgb(255, 205, 86)',
+            green: 'rgb(75, 192, 192)',
+            blue: 'rgb(54, 162, 235)',
+            purple: 'rgb(153, 102, 255)',
+            grey: 'rgb(201, 203, 207)'
+        };
+
+        function randomScalingFactor() {
+            return (Math.random() > 0.5 ? 1.0 : -1.0) * Math.round(Math.random() * 100);
+        }
+
+
+        function datavar() {
+            return [VIN, VBAT, SPDK, TP, APPD, CELV, ES, ECT]
+        }
+
+        function onRefresh(chart) {
+            let lab = ["VIN", "VBAT", "SPDK", "TP", "APPD", "CELV", "ES", "ECT"]
+            let i = 0
+            let dat = datavar()
+            chart.config.data.datasets.forEach(function (dataset) {
+                dataset.data.push({
+                    x: TIME,
+                    y: dat[lab.indexOf(dataset.label)]
+                })
+            })
+        }
+
+        var color = Chart.helpers.color;
+        var ctx = document.getElementById('scatter-chart').getContext('2d');
+        var config = {
+            type: 'line',
+            data: {
+                datasets: []
+            },
+            options: {
+                legend: {
+                    display: true,
+                    align: 'center',
+                    labels: {
+                        usePointStyle: true,
+                        boxWidth: 10,
+                        fontColor: '#fff',
+                        lineCap: 'butt',
+                    }
+                },
+                elements: {
+                    point: {
+                        radius: 1
+                    }
+                },
+                scales: {
+                    xAxes: [{
+                        type: 'realtime',
+                        realtime: {
+                            duration: 20000,
+                            refresh: 1000,
+                            delay: 7000,
+                            onRefresh: onRefresh
+                        },
+                        gridLines: {color: "#696969"},
+                        ticks: {
+                            fontColor: "white",
+
+                        }
+                    }],
+                    yAxes: []
+                },
+                tooltips: {
+                    mode: 'nearest',
+                    intersect: false
+                },
+                hover: {
+                    mode: 'nearest',
+                    intersect: false
+                }
+            }
+        };
+        console.log(config)
+        var chart1 = new Chart(ctx, config)
+        console.log(chart1)
+        console.log(config)
+        let lab = ["VIN", "VBAT", "SPDK", "TP", "APPD", "CELV", "ES", "ECT"]
+        let unit = ["Volt", "Volt", "Kmph", "", "", "", "", ""]
+        var colorNames = Object.keys(chartColors);
+
+        function addDatasets1(index) {
+            var colorName = colorNames[config.data.datasets.length % colorNames.length];
+            var newColor = chartColors[colorName];
+            var newDataset = {
+                label: lab[index],
+                backgroundColor: color(newColor).alpha(0.5).rgbString(),
+                borderColor: newColor,
+                fill: false,
+                data: [],
+                yAxisID: 'y-axis-' + index,
+                pointStyle: "line",
+                borderWidth: 1.5,
+            };
+
+            config.data.datasets.push(newDataset);
+            addScale(index)
+            console.log('y-axis-' + index)
+            chart1.update();
+        };
+
+        function addScale(index) {
+
+            var newScale = {
+                id: 'y-axis-' + index,
+                scaleLabel: {
+                    display: true,
+                    labelString: lab[index] + " (" + unit[index] + ")"
+                },
+                gridLines: {color: "#696969"},
+                ticks: {
+                    fontColor: "white"
+                }
+            }
+            if (index % 2 === 0) {
+                newScale.position = "left"
+            } else {
+                newScale.position = "right"
+            }
+            console.log(index)
+            config.options.scales.yAxes.push(newScale)
+            chart1.update()
+        }
+
+        function removeDatasets(index) {
+            let lab = ["VIN", "VBAT", "SPDK", "TP", "APPD", "CELV", "ES", "ECT"]
+            chart1.config.data.datasets.forEach(function (dataset) {
+                console.log(index)
+                if (dataset.label === lab[index]) {
+                    config.data.datasets.pop();
+                    config.options.scales.yAxes.pop()
+                    chart1.update();
+                }
+            })
+
+        };
+
+        function addds(selectedarray) {
+            let lab = ["VIN", "VBAT", "SPDK", "TP", "APPD", "CELV", "ES", "ECT"]
+            for (var i = 0; i < selectedarray.length; i++) {
+                var flag = 0
+                lab.indexOf(selectedarray[i])
+                console.log(chart1.config.data.datasets.length)
+                for (var j = 0; j < chart1.data.datasets.length; j++) {
+                    if (chart1.data.datasets[j].label === selectedarray[i]) {
+                        flag = 1
+                        break
+                    } else if (chart1.data.datasets[j].label !== selectedarray[i]) {
+                        flag = 0
+                    }
+                }
+                if (flag === 0) {
+                    addDatasets1(lab.indexOf(selectedarray[i]))
+                }
+            }
+            for (var k = 0; k < chart1.config.data.datasets.length; k++) {
+                var flag = 0
+                lab.indexOf(selectedarray[k])
+                console.log(chart1.config.data.datasets.length)
+                for (var l = 0; l < selectedarray.length; l++) {
+                    if (chart1.data.datasets[k].label === selectedarray[l]) {
+                        flag = 1
+                        break
+                    } else if (chart1.data.datasets[k].label !== selectedarray[l]) {
+                        flag = 0
+                    }
+                }
+                if (flag === 0) {
+                    removeDatasets(lab.indexOf(chart1.config.data.datasets[k].label))
+                }
+            }
+        }
+
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/i18n/defaults-en_US.min.js"></script>
+    <script>
+        $(".multiple_select").mousedown(function (e) {
+            if (e.target.tagName == "OPTION") {
+                return; //don't close dropdown if i select option
+            }
+            $(this).toggleClass('multiple_select_active'); //close dropdown if click inside <select> box
+        });
+        $(".multiple_select").on('blur', function (e) {
+            $(this).removeClass('multiple_select_active'); //close dropdown if click outside <select>
+        });
+
+        $('.multiple_select option').mousedown(function (e) { //no ctrl to select multiple
+            e.preventDefault();
+            $(this).prop('selected', $(this).prop('selected') ? false : true); //set selected options on click
+            $(this).parent().change(); //trigger change event
+        });
+
+
+        $("#myFilter").on('change', function () {
+            var selected = $("#myFilter").val(); //here I get all options and convert to string
+            console.log(selected)
+            addds(selected)
+            var document_style = document.documentElement.style;
+            if (selected !== "") {
+                document_style.setProperty('--text', "'Selected: " + selected + "'");
+            } else
+                document_style.setProperty('--text', "'Select values'");
+        })
+    </script>
+    <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+    <script>
+        function get_archive_data() {
+            console.log($("#fromdata").val() + " " + $("#todata").val())
+            console.log(Object.values(params))
+            if (params.length != 0) {
+                $.ajax({
+                    method: "POST",
+                    url: "api/data/archive",
+                    async: true,
+                    data: {
+                        'csrfmiddlewaretoken': csrftoken,
+                        'from': $("#fromdata").val(),
+                        'to': $("#todata").val(),
+                        'parameters[]': Object.values(params)
+                    },
+                    success: function (result, status, xhr) {
+                        //clearInterval(clr)
+                        //archive = true
+                        var x = document.getElementById("scatter-chart");
+                        var y = document.getElementById("line-chart");
+                        console.log(result)
+                        // search(result)
+                        adjustValue1(result)
+                        if (x.style.display === "block") {
+                            x.style.display = "none"
+                            y.style.display = "block"
+                        } else {
+                            y.style.display = "block"
+                        }
+                    },
+                    error: function (error_data) {
+                        console.log("error")
+                        alert("error")
+                        console.log(error_data)
+                    }
+                })
+            } else {
+                alert("Device Not Selected")
+            }
+        }
+
+        function refreshdata() {
+            archive = false
+            var x = document.getElementById("scatter-chart");
+            var y = document.getElementById("line-chart");
+            if (x.style.display === "none") {
+                x.style.display = "block"
+                y.style.display = "none"
+            } else {
+                x.style.display = "block"
+            }
+        }
+
+        {##}
+        {#var data = [#}
+        {#    {#}
+        {#        x: ['2013-10-04 22:23:00', '2013-11-04 22:23:00', '2013-12-04 22:23:00'],#}
+        {#        y: [1, 3, 6],#}
+        {#        type: 'scatter'#}
+        {#    }#}
+        {#];#}
+        {#var config1 = {responsive: true}#}
+        {#Plotly.newPlot('line-chart', data, config1);#}
+
+        function adjustValue1(value) {
+            var obj, yaxisobj;
+            var data = [];
+            for (let i = 0; i < value.selected.length; i++) {
+                obj = {
+                    name: value.param[i],
+                    x: value.labels,
+                    y: value.selected[i],
+                    type: 'line'
+                }
+                data.push(obj)
+
+            }
+            var layout = {
+                legend: {
+                    x: 0.5,
+                    y: 1.3,
+                    "orientation": "h",
+                    font: {
+                        family: 'sans-serif',
+                        size: 12,
+                        color: '#fff'
+                    },
+                },
+                margin: {
+                    l: 50,
+                    r: 50,
+                    b: 25,
+                    t: 25,
+                },
+                autosize: false,
+                width: 1120,
+                height: 350,
+                paper_bgcolor: '#313131',
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                xaxis: {
+                    ticks: '',
+                    side: 'bottom',
+                    gridcolor: '#696969',
+                    linecolor: '#696969',
+                    tickfont: {
+                        family: 'Old Standard TT, serif',
+                        size: 14,
+                        color: 'white'
+                    },
+                },
+                yaxis: {
+                    title: 'Vin',
+                    gridcolor: '#696969',
+                    linecolor: '#696969',
+                    titlefont: {color: "rgb(255,103,0)"},
+                    tickfont: {
+                        family: 'Old Standard TT, serif',
+                        size: 14,
+                        color: 'white'
+                    },
+                },
+                yaxis2: {
+                    title: 'Vbat',
+                    gridcolor: '#696969',
+                    linecolor: '#696969',
+                    titlefont: {color: "rgb(57,255,20)"},
+                    overlaying: 'y',
+                    side: 'right',
+                    tickfont: {
+                        family: 'Old Standard TT, serif',
+                        size: 14,
+                        color: 'white'
+                    },
+                },
+            };
+            Plotly.newPlot('line-chart', data, layout, {modeBarButtonsToRemove: ['hoverClosestCartesian', 'zoom2d', 'hoverCompareCartesian', 'zoomIn2d', 'zoomOut2d', 'pan2d', 'toggleSpikelines', 'resetScale2d']});
+        }
+    </script>
+    <script>
+        var params;
+
+        function getdevicelist() {
+            $.ajax({
+                method: "GET",
+                url: 'api/data/devicelist',
+                success: function (data) {
+                    console.log(data.devicelist)
+                    selectDevice(data.devicelist)
+                },
+                error: function (error_data) {
+                    console.log("error")
+                    console.log(error_data)
+                }
+            })
+        }
+
+        function selectDevice(data) {
+            var inputopt = []
+            var obj = {}
+            for (let i = 0; i < data.length; i++) {
+                obj = {
+                    text: data[i],
+                    value: data[i],
+                }
+                inputopt.push(obj)
+            }
+            console.log(inputopt)
+            bootbox.prompt({
+                title: "This is a prompt with a set of checkbox inputs!",
+                inputType: 'radio',
+                inputOptions: inputopt,
+                callback: function (result) {
+                    console.log(result);
+                    getDeviceParameters(result)
+                }
+            });
+        }
+
+        function getDeviceParameters(deviceid) {
+            $.ajax({
+                method: "POST",
+                url: "api/data/deviceparameters",
+                async: true,
+                data: {'csrfmiddlewaretoken': csrftoken, "deviceid": deviceid},
+                success: function (result, status, xhr) {
+                    console.log(result)
+                    selectdeviceParameters(result.deviceparameters)
+                },
+                error: function (error_data) {
+                    console.log("error")
+                    alert("error")
+                    console.log(error_data)
+                }
+            })
+        }
+
+        function selectdeviceParameters(param) {
+            var inputopt = []
+            var obj = {}
+            for (let i = 0; i < param.length; i++) {
+                obj = {
+                    text: param[i],
+                    value: param[i],
+                }
+                inputopt.push(obj)
+            }
+            console.log(inputopt)
+            bootbox.prompt({
+                title: "This is a prompt with a set of checkbox inputs!",
+                inputType: 'checkbox',
+                inputOptions: inputopt,
+                callback: function (result) {
+                    params = Object.values(result);
+                    console.log(params);
+                }
+            });
+        }
+    </script>
+    <script>
+        function rand() {
+            return Math.random();
+        }
+
+        var time = new Date();
+
+        var data = [{
+            x: [time],
+            y: [rand],
+            mode: 'lines',
+            line: {color: '#80CAF6'}
+        },
+        ]
+
+        Plotly.plot('bar', data);
+
+        var cnt = 0;
+
+        var interval = setInterval(function () {
+
+            var time = new Date();
+
+            var update = {
+                x: [[time]],
+                y: [[rand()]]
+            }
+
+            var olderTime = time.setMinutes(time.getMinutes() - 1);
+            var futureTime = time.setMinutes(time.getMinutes() + 1);
+
+            var minuteView = {
+                xaxis: {
+                    type: 'date',
+                    range: [olderTime, futureTime]
+                }
+            };
+
+            Plotly.relayout('bar', minuteView);
+            Plotly.extendTraces('bar', update, [0])
+
+            if (cnt === 100) clearInterval(interval);
+        }, 100);
+    </script>
+{% endblock javascripts %}

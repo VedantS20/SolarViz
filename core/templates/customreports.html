@@ -1,0 +1,1979 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Indoor Location {% endblock title %}
+
+<!-- Specific CSS goes HERE  -->
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+          integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <style>
+        #myform h5, h4, h6, label {
+            color: black;
+        }
+
+        #info h6 {
+            font-family: Arial;
+            font-weight: 700;
+        }
+
+        #abc p {
+            font-weight: 400;
+            color: black;
+            margin: 0;
+        }
+
+        #abc span {
+            color: blue;
+        }
+    </style>
+    <style>
+        .quotation h1 {
+            margin: 20px auto;
+            text-align: center;
+        }
+
+        .quotation h3 {
+            font-weight: bold;
+            text-align: left;
+            font-size: small;
+        }
+
+        table.quotation {
+            width: 100%;
+            border: 1px solid #037547;
+            border-collapse: collapse;
+        }
+
+        .quotation thead, tfoot {
+            border-width: 1px;
+            border-style: solid;
+        }
+
+        .quotation th, .quotation td {
+            border: 1px solid #037547;
+            font-size: x-small;
+            color: #037547;
+        }
+
+        .quotation thead th,
+        .quotation tfoot th {
+            background-color: #E0EBE3;
+        }
+
+        .quotation tbody td {
+            background-color: #FFFBFE;
+        }
+
+        .quotation tr {
+            text-align: center;
+        }
+
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+          integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+          crossorigin="anonymous"/>
+{% endblock stylesheets %}
+
+{% block content %}
+    {#    <div class="row m-0">#}
+    {#        <div class="col" id="myDiv">#}
+    {#        </div>#}
+    {#        <div class="col ml-20" id="myForm" style="background-color: #fff3cd">#}
+    {#        </div>#}
+    {#    </div>#}
+    <div style="position: absolute">
+        <div class="form-inline">
+            <button id="3dview" onclick="View_3D()" class="btn btn-outline-danger">3D</button>
+            <button id="2dview" onclick="Show_2D()" class="btn btn-outline-danger">2D</button>
+            <button id="xyzview" onclick="View_xyz()" class="btn btn-outline-danger">xy-xz</button>
+            <button id="switch" onclick="switchdiv()" class="btn btn-outline-danger">Switch</button>
+            <button id="overview" onclick="overview()" class="btn btn-outline-danger">Overview</button>
+            <a href="unity.html">
+                <button id="simuation" class="btn btn-outline-danger">3D Simulation</button>
+            </a>
+            <a href="./stationreport.html">
+                <button id="Show Report" class="btn btn-outline-danger">Show
+                    Report
+                </button>
+            </a>
+            <input class="form-control m-3" type="text" id="searchinput" placeholder="Enter TagID"
+                   aria-label="default input example">
+            <button id="change" onclick="tracecolorchange()" class="btn btn-primary "><i class="fas fa-search"></i>
+            </button>
+
+        </div>
+        {#    <small style="color: black;display: inline;text-align: center"><strong> Status: </strong></small>#}
+    </div>
+    <h4 id="status" style="color: greenyellow;text-align: center"><strong>--</strong></h4>
+    <div id="abc" class="row p-0">
+        <div class="col-md-6" id="2d" style="display: block">
+            <div id='myDiv' style="height: 80vh; width:95%;display:block;"></div>
+            <div id="cd" style="background-color: #fff;display: none; padding:12px;height: 80vh">
+                <table class="quotation">
+                    <thead>
+                    <th>LOGO</th>
+                    <th>BOLERO BUILD SHEET:U202 TCF TRIM</th>
+                    <th>dd/mm/yyyy hh:mm</th>
+                    </thead>
+                </table>
+                <table class="quotation">
+                    <tr>
+                        <th>Modal Code</th>
+                        <th></th>
+                        <th>Order No</th>
+                    </tr>
+                    <tr>
+                        <td>XXXXXXXXXXXXX</td>
+                        <td>XXXXXXXXXXXXX</td>
+                        <td>XXXXXXXXXXXXX</td>
+                    </tr>
+                    <tr>
+                        <th>BIN</th>
+                        <th></th>
+                        <th>Engine</th>
+                    </tr>
+                    <tr>
+                        <td>XXXXXXXXXXXX</td>
+                        <td></td>
+                        <td>XXXXXXXXXXXX</td>
+                    </tr>
+                    <tr>
+                        <th>VIN</th>
+                        <th></th>
+                        <th>Country</th>
+                    </tr>
+                    <tr>
+                        <td>XXXXXXXXXXXXXX</td>
+                        <td>XXXXXXXXXXXXXX</td>
+                        <td>INDIA</td>
+                    </tr>
+                    <tr>
+                        <th>COLOR</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <td>WHITE</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+                <table class="quotation">
+                    <thead>
+                    <th colspan="7">CITY PKP WITH CARGO</th>
+                    </thead>
+                    <thead>
+                    <th>2WD</th>
+                    <th>Seater</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th colspan="2"></th>
+                    </thead>
+                    <thead>
+                    <th>XXXXXXX</th>
+                    <th></th>
+                    <th colspan="2">POWER STEERING</th>
+                    <th>BS6</th>
+                    <th>NON ABS</th>
+                    <th>106</th>
+                    </thead>
+                </table>
+                <table class="quotation">
+                    <thead>
+                    <th colspan="1">Part</th>
+                    <th colspan="2">Part Description</th>
+                    <th colspan="1">Part</th>
+                    <!-- <th>Price Inct <br /> VAT per m<sup>2</sup></th> -->
+                    <th colspan="2">Part Description</th>
+                    <!-- <th>Price: <br />less VAT &amp; Discount</th> -->
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td colspan="2"></td>
+                        <td></td>
+                        <td colspan="2"></td>
+                        <!-- <td></td>
+                        <td></td> -->
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td colspan="2"></td>
+                        <td></td>
+                        <td colspan="2"></td>
+                        <!-- <td></td>
+                        <td></td> -->
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td colspan="2"></td>
+                        <td></td>
+                        <td colspan="2"></td>
+                        <!-- <td></td>
+                        <td></td> -->
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td colspan="2"></td>
+                        <td></td>
+                        <td colspan="2"></td>
+                        <!-- <td></td>
+                        <td></td> -->
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td colspan="2"></td>
+                        <td></td>
+                        <td colspan="2"></td>
+                        <!-- <td></td>
+                        <td></td> -->
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td colspan="2"></td>
+                        <td></td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td colspan="2"></td>
+                        <td></td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td colspan="2"></td>
+                        <td></td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td colspan="2"></td>
+                        <td></td>
+                        <td colspan="2"></td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <thead>
+                    <th>Sub Platform</th>
+                    <th colspan="2">BOM DATA</th>
+                    <th>U202_TCF-TRIM1'.'U202_TCF-TRIM2</th>
+                    <!-- <th>Price Inct <br /> VAT per m<sup>2</sup></th> -->
+                    <th colspan="2">Duplicate</th>
+                    <!-- <th>Price: <br />less VAT &amp; Discount</th> -->
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td colspan="2"></td>
+                        <td></td>
+                        <td colspan="2"></td>
+                        <!-- <td></td>
+                        <td></td> -->
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td colspan="2"></td>
+                        <td></td>
+                        <td colspan="2"></td>
+                        <!-- <td></td>
+                        <td></td> -->
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td colspan="2"></td>
+                        <td></td>
+                        <td colspan="2"></td>
+                        <!-- <td></td>
+                        <td></td> -->
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td colspan="2"></td>
+                        <td></td>
+                        <td colspan="2"></td>
+                        <!-- <td></td>
+                        <td></td> -->
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td colspan="2"></td>
+                        <td></td>
+                        <td colspan="2"></td>
+                        <!-- <td></td>
+                        <td></td> -->
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td colspan="2"></td>
+                        <td></td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td colspan="2"></td>
+                        <td></td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td colspan="2"></td>
+                        <td></td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td colspan="2"></td>
+                        <td></td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td colspan="2"></td>
+                        <td></td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td colspan="2"></td>
+                        <td></td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td colspan="2"></td>
+                        <td></td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td colspan="2"></td>
+                        <td></td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td colspan="2"></td>
+                        <td></td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td colspan="2"></td>
+                        <td></td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td colspan="2"></td>
+                        <td></td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td colspan="2"></td>
+                        <td></td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td colspan="2"></td>
+                        <td></td>
+                        <td colspan="2"></td>
+                    </tr>
+                    </tbody>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-6" id="xyz" style="display: none">
+            <div class="row">
+                <div id='myDiv1' style="height: 80vh;display:block;width: 450px"></div>
+                <div id='myDivz' style="height: 80vh;display:block;width: 450px"></div>
+            </div>
+        </div>
+        <div class="col-md-6" id="xyz1" style="display: none">
+            <div class="row">
+                <div id='myDiv3' style="height: 80vh;display:block;width: 700px">
+                </div>
+                <div id='myDiv4' style="height: 80vh;display:block;width: 200px"></div>
+            </div>
+            <h1 id="tag_pos"></h1>
+        </div>
+        <div class="col-md-6">
+            <div id='myform' style="background-color: #fff;height: 80vh;">
+                {#            <h5 style="display: inline">{{ user.username }}</h5>#}
+                {#            <h5 style="display: inline" id="date"></h5>#}
+                <div class="container">
+                    <h6 style="text-align: center; padding: 10px">Trim Line Traveler-Bolero Pick up</h6>
+                    <div class="row">
+                        <div class="col-sm">
+                            <p>Shift-<span id="shift"></span></p>
+                            <p>Date-<span id="date"></span></p>
+                            <p>Vehicle Serial
+                                Number-<span id="vin"></span></p>
+                            {#                        <h6 class= "fst-light" id="vehserialno"></h6>#}
+
+                        </div>
+                        <div id="info" class="col-sm">
+                            {#                        <p>Operator:<span>{{ user.username }}</span></p>#}
+                            <p>Color: <span id="color"></span></p>
+                            <p>Key No:<span id="keyno"></span></p>
+                            <p>Stg: <span id="stg"></span></p>
+                            <p>Use:<span id="use"></span></p>
+                            <p>Type:<span id="type"></span></p>
+                        </div>
+                    </div>
+                    <div id="station-info" style="margin-top: 30px;">
+                        <h5 id="heading" style="text-align: center;">Heading</h5>
+                        <div id="check" style="text-align: center;display: none">
+                            <div id="radiodiv">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                           id="check1" checked>
+                                    <label class="form-check-label" id="1" for="check1">
+                                        Default radio
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                           id="check2">
+                                    <label class="form-check-label" id="2" for="check2">
+                                        Default checked radio
+                                    </label>
+                                </div>
+                            </div>
+                            <div style="display: none" id="params">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="check3">
+                                    <label id="3" class="form-check-label" for="check3">3</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="check4">
+                                    <label id="4" class="form-check-label" for="check4">4</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="check5">
+                                    <label id="5" class="form-check-label" for="check5">5</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="check6">
+                                    <label id="6" class="form-check-label" for="check6">6</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="check7">
+                                    <label id="7" class="form-check-label" for="check7">7</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="check8">
+                                    <label id="8" class="form-check-label" for="check8">8</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="check9">
+                                    <label id="9" class="form-check-label" for="check9">9</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="check10">
+                                    <label id="10" class="form-check-label" for="check10">10</label>
+                                </div>
+                            </div>
+                        </div>
+                        <button id="switch" onclick="error_code()" class="btn btn-success"
+                                style="position:absolute;right: 30px;bottom: 15px">Submit
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="30000"
+             style="background-color: deeppink;position: absolute; bottom:5% ; right: 5%;  ">
+            <div class="toast-body" style="color: #ff0033; font-weight: 600; font-size: medium;">
+                <button type="button" class="ml-3 mb-1 close" data-dismiss="toast" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <span id="msg" style="color:white "></span>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/1.58.4/plotly.min.js"
+            integrity="sha512-odxyOOOwpEgYQnS+TzF/P33O+DfGNGqyh89pJ/u2addhMw9ZIef3M8aw/otYSgsPxLdZi3HQhlI9IiX3H5SxpA=="
+            crossorigin="anonymous"></script>
+    <script>
+        function updateTag(point) {
+            var data_update = {
+                x: [[point[0][0]]],
+                y: [[point[0][1]]],
+                z: [[point[0][2]]]
+            }
+            var data_update1 = {
+                x: [[point[1][0]]],
+                y: [[point[1][1]]],
+                z: [[point[1][2]]]
+            }
+            var data_update2 = {
+                x: [[point[2][0]]],
+                y: [[point[2][1]]],
+                z: [[point[2][2]]]
+            }
+
+            Plotly.restyle('myDiv', data_update, 4)
+            Plotly.restyle('myDiv', data_update1, 5)
+            Plotly.restyle('myDiv', data_update2, 6)
+            Plotly.restyle('myDiv1', data_update, 4)
+            Plotly.restyle('myDiv1', data_update1, 5)
+            Plotly.restyle('myDiv1', data_update2, 6)
+            Plotly.restyle('myDiv3', data_update, 0)
+            Plotly.restyle('myDiv3', data_update1, 1)
+            Plotly.restyle('myDiv3', data_update2, 2)
+        }
+
+        function updateTag1(point) {
+            var data_update = {
+                x: [[point[0][0]]],
+                y: [[point[0][2]]],
+            }
+            var data_update2 = {
+                x: [[point[1][0]]],
+                y: [[point[1][2]]],
+            }
+            var data_update3 = {
+                x: [[point[2][0]]],
+                y: [[point[2][2]]],
+            }
+            var data_update_overview = {
+                x: [[1]],
+                y: [[point[0][2]]],
+            }
+            var data_update2_overview = {
+                x: [[1]],
+                y: [[point[1][2]]],
+            }
+            var data_update3_overview = {
+                x: [[1]],
+                y: [[point[2][2]]],
+            }
+            Plotly.restyle('myDivz', data_update, 4)
+            Plotly.restyle('myDivz', data_update2, 5)
+            Plotly.restyle('myDivz', data_update3, 6)
+
+            Plotly.restyle('myDiv4', data_update_overview, 0)
+            Plotly.restyle('myDiv4', data_update2_overview, 1)
+            Plotly.restyle('myDiv4', data_update3_overview, 2)
+        }
+
+        function loc() {
+            $.ajax({
+                method: "GET",
+                url: 'api/data/atdata',
+                success: function (data1) {
+                    updateTag(data1.atdata)
+                    updateTag1(data1.atdata)
+                    if (document.getElementById('xyz1').style.display !== 'block') {
+                        document.getElementById('status').textContent = data1.message
+                    }
+                    document.getElementById('date').textContent = data1.date
+                    document.getElementById("shift").textContent = data1.shift
+                    document.getElementById('heading').textContent = data1.heading
+                    document.getElementById('vin').textContent = data1.station_info.vin
+                    document.getElementById('color').textContent = data1.station_info.color
+                    document.getElementById('keyno').textContent = data1.station_info.key_no
+                    document.getElementById('stg').textContent = data1.station_info.stg
+                    document.getElementById('use').textContent = data1.station_info.use
+                    document.getElementById('type').textContent = data1.station_info.typ
+                    if (data1.param.length !== 0) {
+                        document.getElementById('check').style.display = 'block'
+                    } else {
+                        document.getElementById('check').style.display = 'none'
+                    }
+                    if (fl === false && data1.flag === "{{ user }}") {
+                        changediv(data1.flag)
+                        fl = true
+                    } else if (data1.flag !== "{{ user }}") {
+                        fl = false
+                    }
+                    for (let i = 0; i < data1.param.length; i++) {
+                        document.getElementById(i + 1).textContent = data1.param[i]
+                        document.getElementById('check' + (i + 1)).value = data1.param[i]
+                    }
+                },
+                error: function (error_data) {
+                    console.log("error")
+                    console.log(error_data)
+                }
+            })
+        }
+
+        setInterval(loc, 500)
+
+        function View_2D() {
+            var trace1 = {
+                name: "AN0",
+                x: [0],
+                y: [0],
+                type: 'scatter',
+                marker: {
+                    color: "#E8290B",
+                    size: 15,
+                    symbol: 'triangle-up'
+                },
+                showlegend: false
+            };
+            var trace2 = {
+                name: "AN1",
+                x: [2.99],
+                y: [0],
+                type: 'scatter',
+                marker: {
+                    color: "#E8290B",
+                    size: 15,
+                    symbol: 'triangle-up'
+                },
+                showlegend: false
+            };
+            var trace3 = {
+                name: "AN2",
+                x: [0.44],
+                y: [3.88],
+                type: 'scatter',
+                marker: {
+                    color: "#E8290B",
+                    size: 15,
+                    symbol: 'triangle-up'
+                },
+                showlegend: false
+            };
+            var trace4 = {
+                name: "AN4",
+                x: [2.42],
+                y: [4.35],
+                type: 'scatter',
+                marker: {
+                    color: "#E8290B",
+                    size: 15,
+                    symbol: 'triangle-up'
+                },
+                showlegend: false
+            };
+            var trace9 = {
+                name: "AN5",
+                x: [3.75],
+                y: [5.50],
+                type: 'scatter',
+                marker: {
+                    color: "#E8290B",
+                    size: 15,
+                    symbol: 'triangle-up'
+                },
+                showlegend: false
+            };
+            var trace10 = {
+                name: "AN6",
+                x: [0],
+                y: [5],
+                type: 'scatter',
+                marker: {
+                    color: "#E8290B",
+                    size: 15,
+                    symbol: 'triangle-up'
+                },
+                showlegend: false
+            };
+            var trace5 = {
+                name: "D632",
+                x: [],
+                y: [],
+                type: 'scatter',
+                marker: {
+                    color: "#29B966",
+                },
+                showlegend: false,
+                mode: 'markers+text',
+                textposition: 'top center',
+                textfont: {
+                    color: '#1f77b4',
+                },
+                text: "D632",
+            };
+            var trace6 = {
+                name: "54B6",
+                x: [],
+                y: [],
+                type: 'scatter',
+                marker: {
+                    color: "#29B966",
+                },
+                showlegend: false,
+                mode: 'markers+text',
+                textposition: 'top center',
+                textfont: {
+                    color: '#1f77b4',
+                },
+                text: "54B6",
+            };
+            var trace7 = {
+                name: "D70B",
+                x: [],
+                y: [],
+                type: 'scatter',
+                marker: {
+                    color: "#29B966",
+                },
+                showlegend: false,
+                mode: 'markers+text',
+                textposition: 'top center',
+                textfont: {
+                    color: '#1f77b4',
+                },
+                text: "D70B",
+            };
+            var trace8 = {
+                x: [1.5, 1.5, 1.5],
+                y: [1.25, 2.25, 3.25],
+                type: 'scatter',
+                mode: 'text',
+                text: ['Station 1', 'Station 2', 'Station 3'],
+                textfont: {
+                    color: 'black',
+                    size: 18,
+                    family: 'Arial'
+                },
+                showlegend: false
+            };
+            var data = [trace1, trace2, trace3, trace4, trace5, trace6, trace7, trace8, trace9, trace10];
+            var layout = {
+                title: {
+                    text: 'Top View',
+                    font: {
+                        color: '#111',
+                        size: 20
+                    },
+                },
+                images: [{
+                    "source": "http://machinemath.co.in/media/driverimage/2020/warehouse.png",
+                    {#"source": "http://127.0.0.1:8000/media/driverimage/2020/warehouse.png",#}
+                    "xref": "paper",
+                    "yref": "paper",
+                    "x": 0,
+                    "y": 1,
+                    "sizex": 1,
+                    "sizey": 1,
+                    "sizing": "stretch",
+                    "opacity": 0.4,
+                    "layer": "below"
+                },],
+                shapes: [
+                    {
+                        type: 'rect',
+                        xref: 'paper',
+                        yref: 'y',
+                        x0: 0,
+                        y0: 1,
+                        x1: 1,
+                        y1: 1.5,
+                        fillcolor: '#000',
+                        opacity: 0.2,
+                        line: {
+                            width: 0
+                        }
+                    },
+                    {
+                        type: 'rect',
+                        xref: 'paper',
+                        yref: 'y',
+                        x0: 0,
+                        y0: 2,
+                        x1: 1,
+                        y1: 2.5,
+                        fillcolor: '#000',
+                        opacity: 0.2,
+                        line: {
+                            width: 0
+                        }
+                    },
+                    {
+                        type: 'rect',
+                        xref: 'paper',
+                        yref: 'y',
+                        x0: 0,
+                        y0: 3,
+                        x1: 1,
+                        y1: 3.5,
+                        fillcolor: '#000',
+                        opacity: 0.2,
+                        line: {
+                            width: 0
+                        }
+                    },
+                ],
+                xaxis: {
+                    showgrid: true,
+                    zeroline: false,
+                    showline: true,
+                    mirror: 'ticks',
+                    gridcolor: '#edeeef ',
+                    gridwidth: 0.5,
+                    zerolinecolor: '#969696',
+                    zerolinewidth: 4,
+                    linecolor: '#636363',
+                    autotick: false,
+                    ticks: 'outside',
+                    tick0: 0,
+                    dtick: 0.25,
+                    ticklen: 4,
+                    tickwidth: 1,
+                    tickcolor: '#000'
+                },
+                yaxis: {
+                    showgrid: true,
+                    zeroline: false,
+                    showline: true,
+                    mirror: 'ticks',
+                    gridcolor: '#edeeef',
+                    gridwidth: 0.5,
+                    zerolinecolor: '#969696',
+                    zerolinewidth: 4,
+                    linecolor: '#636363',
+                    autotick: false,
+                    ticks: 'outside',
+                    tick0: 0,
+                    dtick: 0.25,
+                    ticklen: 4,
+                    tickwidth: 1,
+                    tickcolor: '#000',
+                },
+
+            };
+            Plotly.newPlot('myDiv', data, layout);
+            Plotly.newPlot('myDiv1', data, layout);
+        }
+
+        View_2D()
+
+        {#Overview Function Starts here #}
+
+        function overview_2D() {
+            {% comment %} var trace1 = {
+                 name: "AN0",
+                 x: [0],
+                 y: [0],
+                 type: 'scatter',
+                 marker: {
+                     color: "#E8290B",
+                     size: 15,
+                     symbol: 'triangle-up'
+                 },
+                 showlegend: false
+             };
+             var trace2 = {
+                 name: "AN1",
+                 x: [2.99],
+                 y: [0],
+                 type: 'scatter',
+                 marker: {
+                     color: "#E8290B",
+                     size: 15,
+                     symbol: 'triangle-up'
+                 },
+                 showlegend: false
+             };
+             var trace3 = {
+                 name: "AN2",
+                 x: [0.44],
+                 y: [3.88],
+                 type: 'scatter',
+                 marker: {
+                     color: "#E8290B",
+                     size: 15,
+                     symbol: 'triangle-up'
+                 },
+                 showlegend: false
+             };
+             var trace4 = {
+                 name: "AN4",
+                 x: [2.42],
+                 y: [4.35],
+                 type: 'scatter',
+                 marker: {
+                     color: "#E8290B",
+                     size: 15,
+                     symbol: 'triangle-up'
+                 },
+                 showlegend: false
+             };{% endcomment %}
+            var trace5 = {
+                name: "D632",
+                x: [],
+                y: [],
+                type: 'scatter',
+                marker: {
+                    color: "#29B966",
+                },
+                showlegend: false,
+                mode: 'markers+text',
+                textposition: 'top center',
+                textfont: {
+                    color: '#1f77b4',
+                },
+                text: "D632",
+            };
+            var trace6 = {
+                name: "54B6",
+                x: [],
+                y: [],
+                type: 'scatter',
+                marker: {
+                    color: "#29B966",
+                },
+                showlegend: false,
+                mode: 'markers+text',
+                textposition: 'top center',
+                textfont: {
+                    color: '#1f77b4',
+                },
+                text: "54B6",
+            };
+            var trace7 = {
+                name: "D70B",
+                x: [],
+                y: [],
+                type: 'scatter',
+                marker: {
+                    color: "#29B966",
+                },
+                showlegend: false,
+                mode: 'markers+text',
+                textposition: 'top center',
+                textfont: {
+                    color: '#1f77b4',
+                },
+                text: "D70B",
+            };
+            {% comment %}       var trace8 = {
+                       x: [1.5, 1.5, 1.5],
+                       y: [1.25, 2.25, 3.25],
+                       type: 'scatter',
+                       mode: 'text',
+                       text: ['Station 1', 'Station 2', 'Station 3'],
+                       textfont: {
+                           color: 'black',
+                           size: 18,
+                           family: 'Arial'
+                       },
+                       showlegend: false
+                   };{% endcomment %}
+            var data = [trace5, trace6, trace7];
+            var layout = {
+                title: {
+                    text: 'Top View',
+                    font: {
+                        color: '#111',
+                        size: 20
+                    },
+                },
+                shapes: [
+                    {
+                        type: 'rect',
+                        xref: 'paper',
+                        yref: 'y',
+                        x0: 0,
+                        y0: -0.5,
+                        x1: 1,
+                        y1: 0,
+                        fillcolor: '#000',
+                        opacity: 0.2,
+                        line: {
+                            width: 0
+                        }
+                    },
+                    {
+                        type: 'rect',
+                        xref: 'paper',
+                        yref: 'y',
+                        x0: 0,
+                        y0: 0.25,
+                        x1: 1,
+                        y1: 0.75,
+                        fillcolor: '#000',
+                        opacity: 0.2,
+                        line: {
+                            width: 0
+                        }
+                    },
+                    {
+                        type: 'rect',
+                        xref: 'paper',
+                        yref: 'y',
+                        x0: 0,
+                        y0: 1,
+                        x1: 1,
+                        y1: 1.5,
+                        fillcolor: '#000',
+                        opacity: 0.2,
+                        line: {
+                            width: 0
+                        }
+                    },
+                    {
+                        type: 'rect',
+                        xref: 'paper',
+                        yref: 'y',
+                        x0: 0,
+                        y0: 1.75,
+                        x1: 1,
+                        y1: 2.25,
+                        fillcolor: '#000',
+                        opacity: 0.2,
+                        line: {
+                            width: 0
+                        }
+                    },
+                    {
+                        type: 'rect',
+                        xref: 'paper',
+                        yref: 'y',
+                        x0: 0,
+                        y0: 2.5,
+                        x1: 1,
+                        y1: 3,
+                        fillcolor: '#000',
+                        opacity: 0.2,
+                        line: {
+                            width: 0
+                        }
+                    },
+                    {
+                        type: 'rect',
+                        xref: 'paper',
+                        yref: 'y',
+                        x0: 0,
+                        y0: 3.25,
+                        x1: 1,
+                        y1: 3.75,
+                        fillcolor: '#000',
+                        opacity: 0.2,
+                        line: {
+                            width: 0
+                        }
+                    },
+                    {
+                        type: 'line',
+                        x0: 0.25,
+                        y0: -0.5,
+                        x1: 0.25,
+                        y1: 3.75,
+                        line: {
+                            color: 'white',
+                            width: 1
+                        }
+                    },
+                    {
+                        type: 'line',
+                        x0: 0.75,
+                        y0: -0.5,
+                        x1: 0.75,
+                        y1: 3.75,
+                        line: {
+                            color: 'white',
+                            width: 1
+                        }
+                    },
+                    {
+                        type: 'line',
+                        x0: 1.25,
+                        y0: -0.5,
+                        x1: 1.25,
+                        y1: 3.75,
+                        line: {
+                            color: 'white',
+                            width: 1
+                        }
+                    },
+                    {
+                        type: 'line',
+                        x0: 1.75,
+                        y0: -0.5,
+                        x1: 1.75,
+                        y1: 3.75,
+                        line: {
+                            color: 'white',
+                            width: 1
+                        }
+                    },
+                    {
+                        type: 'line',
+                        x0: 2.25,
+                        y0: -0.5,
+                        x1: 2.25,
+                        y1: 3.75,
+                        line: {
+                            color: 'white',
+                            width: 1
+                        }
+                    },
+                    {
+                        type: 'line',
+                        x0: 2.75,
+                        y0: -0.5,
+                        x1: 2.75,
+                        y1: 3.75,
+                        line: {
+                            color: 'white',
+                            width: 1
+                        }
+                    },
+                ],
+                xaxis: {
+                    title: "Bay",
+                    titlefont: {color: "#E21717"},
+                    showgrid: false,
+                    zeroline: false,
+                    showline: false,
+                    mirror: 'ticks',
+                    gridcolor: '#edeeef ',
+                    gridwidth: 0.5,
+                    zerolinecolor: '#969696',
+                    zerolinewidth: 4,
+                    linecolor: '#636363',
+                    {#autotick: false,#}
+                    ticks: 'outside',
+                    fixedrange: true,
+                    range: [-0.25, 3.25],
+                    {#tick0: 0.5,#}
+                    {#dtick: 0.25,#}
+                    ticklen: 4,
+                    tickwidth: 1,
+                    tickcolor: '#000',
+                    tickmode: "array",
+                    tickvals: [0, 0.5, 1, 1.5, 2, 2.5, 3],
+                    ticktext: ["01", "02", '03', '04', '05', '06', '07'],
+                },
+                yaxis: {
+                    title: "Rack",
+                    titlefont: {color: "#E07C24"},
+                    showgrid: false,
+                    zeroline: false,
+                    showline: false,
+                    mirror: 'ticks',
+                    gridcolor: '#edeeef',
+                    fixedrange: true,
+                    range: [-0.5, 3.75],
+                    gridwidth: 0.5,
+                    zerolinecolor: '#969696',
+                    zerolinewidth: 4,
+                    linecolor: '#636363',
+                    autotick: false,
+                    ticks: 'outside',
+                    tick0: 0,
+                    dtick: 0.25,
+                    ticklen: 4,
+                    tickwidth: 1,
+                    tickcolor: '#000',
+                    tickmode: "array",
+                    tickvals: [-0.25, 0.5, 1.25, 2, 2.75, 3.5],
+                    ticktext: ["A", "B", 'C', 'D', 'E', 'F'],
+                },
+
+            };
+            Plotly.newPlot('myDiv3', data, layout);
+        }
+
+        overview_2D()
+
+        {#View for Overview function ends here#}
+
+        function View_3D() {
+            var trace1 = {
+                x: [0],
+                y: [0],
+                z: [0],
+                name: "AN0",
+                mode: 'markers',
+                marker: {
+                    color: '#E8290B',
+                    size: 6,
+                    symbol: 'diamond',
+                    line: {
+                        color: 'rgba(217, 217, 217, 0.14)',
+                        width: 0.5
+                    },
+                    opacity: 0.8
+                },
+                type: 'scatter3d'
+            };
+
+            var trace2 = {
+                x: [2.99],
+                y: [0],
+                z: [0],
+                mode: 'markers',
+                name: 'AN1',
+                marker: {
+                    color: '#E8290B',
+                    size: 6,
+                    symbol: 'diamond',
+                    line: {
+                        color: 'rgb(204, 204, 204)',
+                        width: 1
+                    },
+                    opacity: 0.8
+                },
+                type: 'scatter3d'
+            };
+            var trace3 = {
+                x: [0.44],
+                y: [3.88],
+                z: [0.0],
+                mode: 'markers',
+                name: 'AN2',
+                marker: {
+                    color: '#E8290B',
+                    size: 6,
+                    symbol: 'diamond',
+                    line: {
+                        color: 'rgb(204, 204, 204)',
+                        width: 1
+                    },
+                    opacity: 0.8
+                },
+                type: 'scatter3d'
+            };
+            var trace4 = {
+                x: [2.42],
+                y: [4.35],
+                z: [0],
+                mode: 'markers',
+                name: 'AN3',
+                marker: {
+                    color: '#E8290B',
+                    size: 6,
+                    symbol: 'diamond',
+                    line: {
+                        color: 'rgb(204, 204, 204)',
+                        width: 1
+                    },
+                    opacity: 0.8
+                },
+                type: 'scatter3d'
+            };
+            var trace5 = {
+                x: [],
+                y: [],
+                z: [],
+                mode: 'markers',
+                name: 'D632',
+                marker: {
+                    color: '#29B966',
+                    size: 6,
+                    symbol: 'circle',
+                    line: {
+                        color: 'rgb(204, 204, 204)',
+                        width: 1
+                    },
+                    opacity: 0.8,
+                },
+                type: 'scatter3d',
+            };
+            var trace6 = {
+                x: [],
+                y: [],
+                z: [],
+                mode: 'markers',
+                name: '54B6',
+                marker: {
+                    color: '#29B966',
+                    size: 6,
+                    symbol: 'circle',
+                    line: {
+                        color: 'rgb(204, 204, 204)',
+                        width: 1
+                    },
+                    opacity: 0.8,
+                },
+                type: 'scatter3d',
+            };
+            var trace7 = {
+                x: [],
+                y: [],
+                z: [],
+                mode: 'markers',
+                name: 'D70B',
+                marker: {
+                    color: '#29B966',
+                    size: 6,
+                    symbol: 'circle',
+                    line: {
+                        color: 'rgb(204, 204, 204)',
+                        width: 1
+                    },
+                    opacity: 0.8,
+                },
+                type: 'scatter3d',
+            };
+            var data = [trace1, trace2, trace3, trace4, trace5, trace6, trace7];
+            var layout = {
+                margin: {
+                    l: 0,
+                    r: 0,
+                    b: 0,
+                    t: 0
+                }
+            };
+            Plotly.newPlot('myDiv', data, layout);
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+            $("#radiodiv") // select the radio by its id
+                .change(function () { // bind a function to the change event
+                    {#if ($(this).is(":checked")) { // check if the radio is checked#}
+                    {#    var val = $(this).val(); // retrieve the value#}
+                    {#    console.log(val)#}
+                    {#    if (val === "NOT OK") {#}
+                    {#        document.getElementById("params").style.display = 'block'#}
+                    {#    }#}
+                    $('#params').toggle()
+                });
+        })
+        var fl = false
+
+        function changediv(flag) {
+            if (flag === 'station1' || flag === 'station2' || flag === 'station3') {
+                document.getElementById('cd').style.display = 'block';
+                document.getElementById('myDiv').style.display = 'none';
+                document.getElementById('myDiv').style.display = 'none';
+            }
+        }
+
+        function switchdiv() {
+            if (document.getElementById('myDiv').style.display === 'block') {
+                document.getElementById('myDiv').style.display = 'none';
+                document.getElementById('cd').style.display = 'block';
+            } else {
+                document.getElementById('myDiv').style.display = 'block';
+                document.getElementById('cd').style.display = 'none';
+            }
+        }
+
+        function View_xyz() {
+            if (document.getElementById('2d').style.display === 'block' || document.getElementById('xyz1').style.display === 'block') {
+                document.getElementById('xyz').style.display = 'block';
+                document.getElementById('2d').style.display = 'none';
+                document.getElementById('xyz1').style.display = 'none';
+            } else {
+                document.getElementById('xyz').style.display = 'none';
+                document.getElementById('2d').style.display = 'block';
+                document.getElementById('xyz1').style.display = 'none';
+            }
+        }
+
+        function overview() {
+            if (document.getElementById('2d').style.display === 'block' || document.getElementById('xyz').style.display === 'block') {
+                document.getElementById('xyz1').style.display = 'block';
+                document.getElementById('xyz').style.display = 'none';
+                document.getElementById('2d').style.display = 'none';
+            } else {
+                document.getElementById('xyz1').style.display = 'none';
+                document.getElementById('2d').style.display = 'block';
+                document.getElementById('xyz').style.display = 'none';
+            }
+        }
+
+        function Show_2D() {
+            if (document.getElementById('xyz1').style.display === 'block' || document.getElementById('xyz').style.display === 'block') {
+                document.getElementById('xyz1').style.display = 'none';
+                document.getElementById('xyz').style.display = 'none';
+                document.getElementById('2d').style.display = 'block';
+            } else {
+                document.getElementById('xyz1').style.display = 'none';
+                document.getElementById('2d').style.display = 'none';
+                document.getElementById('xyz').style.display = 'block';
+            }
+        }
+
+        function View_xz() {
+            var trace1 = {
+                name: "AN0",
+                x: [0],
+                y: [0],
+                type: 'scatter',
+                marker: {
+                    color: "#E8290B",
+                    size: 15,
+                    symbol: 'triangle-up'
+                },
+                showlegend: false
+            };
+            var trace2 = {
+                name: "AN1",
+                x: [3.01],
+                y: [0],
+                type: 'scatter',
+                marker: {
+                    color: "#E8290B",
+                    size: 15,
+                    symbol: 'triangle-up'
+                },
+                showlegend: false
+            };
+            var trace3 = {
+                name: "AN2",
+                x: [3.01],
+                y: [0],
+                type: 'scatter',
+                marker: {
+                    color: "#E8290B",
+                    size: 15,
+                    symbol: 'triangle-up'
+                },
+                showlegend: false
+            };
+            var trace4 = {
+                name: "AN4",
+                x: [0.43],
+                y: [-3],
+                type: 'scatter',
+                marker: {
+                    color: "#E8290B",
+                    size: 15,
+                    symbol: 'triangle-up'
+                },
+                showlegend: false
+            };
+            var sym = `D632`;
+            var trace5 = {
+                name: "D632",
+                x: [],
+                y: [],
+                type: 'scatter',
+                marker: {
+                    color: "#29B966",
+                },
+                showlegend: false,
+                mode: 'markers+text',
+                textposition: 'top center',
+                textfont: {
+                    color: '#1f77b4',
+                },
+                text: sym
+            };
+            var trace6 = {
+                name: "54B6",
+                x: [],
+                y: [],
+                type: 'scatter',
+                mode: 'markers+text',
+                textposition: 'top center',
+                textfont: {
+                    color: '#1f77b4',
+                },
+                text: "54B6",
+                marker: {
+                    color: "#29B966",
+                },
+                showlegend: false
+            };
+            var trace7 = {
+                name: "D70B",
+                x: [],
+                y: [],
+                type: 'scatter',
+                mode: 'markers+text',
+                textposition: 'top center',
+                textfont: {
+                    color: '#1f77b4',
+                },
+                text: "D70B",
+                marker: {
+                    color: "#29B966",
+                },
+                showlegend: false
+            };
+            var trace8 = {
+                x: [1.5, 1.5, 1.5],
+                y: [2.25, 1.5, 0.75],
+                type: 'scatter',
+                mode: 'text',
+                text: ['Rack 1', 'Rack 2', 'Rack 3'],
+                textfont: {
+                    color: 'black',
+                    size: 18,
+                    family: 'Arial'
+                },
+                showlegend: false
+            };
+            var data = [trace1, trace2, trace3, trace4, trace5, trace6, trace7, trace8];
+            var layout = {
+                title: {
+                    text: 'Front View',
+                    font: {
+                        color: '#111',
+                        size: 20
+                    },
+                },
+                shapes: [
+                    {
+                        type: 'rect',
+                        xref: 'paper',
+                        yref: 'y',
+                        x0: 0,
+                        y0: 1,
+                        x1: 1,
+                        y1: 0.5,
+                        fillcolor: '#000',
+                        opacity: 0.2,
+                        line: {
+                            width: 0
+                        }
+                    },
+                    {
+                        type: 'rect',
+                        xref: 'paper',
+                        yref: 'y',
+                        x0: 0,
+                        y0: 1.25,
+                        x1: 1,
+                        y1: 1.75,
+                        fillcolor: '#000',
+                        opacity: 0.2,
+                        line: {
+                            width: 0
+                        }
+                    },
+                    {
+                        type: 'rect',
+                        xref: 'paper',
+                        yref: 'y',
+                        x0: 0,
+                        y0: 2,
+                        x1: 1,
+                        y1: 2.5,
+                        fillcolor: '#000',
+                        opacity: 0.2,
+                        line: {
+                            width: 0
+                        }
+                    },
+                ],
+                xaxis: {
+                    showgrid: true,
+                    zeroline: false,
+                    showline: true,
+                    mirror: 'ticks',
+                    gridcolor: '#edeeef ',
+                    gridwidth: 0.5,
+                    zerolinecolor: '#969696',
+                    zerolinewidth: 4,
+                    linecolor: '#636363',
+                    autotick: false,
+                    ticks: 'outside',
+                    tick0: 0,
+                    dtick: 0.25,
+                    ticklen: 4,
+                    tickwidth: 1,
+                    tickcolor: '#000'
+                },
+                yaxis: {
+                    showgrid: true,
+                    zeroline: false,
+                    showline: true,
+                    mirror: 'ticks',
+                    gridcolor: '#edeeef',
+                    gridwidth: 0.5,
+                    zerolinecolor: '#969696',
+                    zerolinewidth: 4,
+                    linecolor: '#636363',
+                    autotick: false,
+                    ticks: 'outside',
+                    tick0: 0,
+                    dtick: 0.25,
+                    ticklen: 4,
+                    tickwidth: 1,
+                    tickcolor: '#000',
+                },
+
+            };
+            Plotly.newPlot('myDivz', data, layout);
+        }
+
+        View_xz()
+        {#Overview function for xz Starts here#}
+
+        function overview_xz() {
+            {% comment %} var trace1 = {
+                 name: "AN0",
+                 x: [1],
+                 y: [0],
+                 type: 'scatter',
+                 marker: {
+                     color: "#E8290B",
+                     size: 15,
+                     symbol: 'triangle-up'
+                 },
+                 showlegend: false
+             };
+             var trace2 = {
+                 name: "AN1",
+                 x: [1],
+                 y: [0],
+                 type: 'scatter',
+                 marker: {
+                     color: "#E8290B",
+                     size: 15,
+                     symbol: 'triangle-up'
+                 },
+                 showlegend: false
+             };
+             var trace3 = {
+                 name: "AN2",
+                 x: [1],
+                 y: [0],
+                 type: 'scatter',
+                 marker: {
+                     color: "#E8290B",
+                     size: 15,
+                     symbol: 'triangle-up'
+                 },
+                 showlegend: false
+             };
+             var trace4 = {
+                 name: "AN4",
+                 x: [1],
+                 y: [-3],
+                 type: 'scatter',
+                 marker: {
+                     color: "#E8290B",
+                     size: 15,
+                     symbol: 'triangle-up'
+                 },
+                 showlegend: false
+             };{% endcomment %}
+            var trace5 = {
+                name: "D632",
+                x: [],
+                y: [],
+                type: 'scatter',
+                marker: {
+                    color: "#29B966",
+                },
+                showlegend: false,
+                mode: 'markers+text',
+                textposition: 'top center',
+                textfont: {
+                    color: '#1f77b4',
+                },
+                text: "D632",
+            };
+            var trace6 = {
+                name: "54B6",
+                x: [],
+                y: [],
+                type: 'scatter',
+                mode: 'markers+text',
+                textposition: 'top center',
+                textfont: {
+                    color: '#1f77b4',
+                },
+                text: "54B6",
+                marker: {
+                    color: "#29B966",
+                },
+                showlegend: false
+            };
+            var trace7 = {
+                name: "D70B",
+                x: [],
+                y: [],
+                type: 'scatter',
+                mode: 'markers+text',
+                textposition: 'top center',
+                textfont: {
+                    color: '#1f77b4',
+                },
+                text: "D70B",
+                marker: {
+                    color: "#29B966",
+                },
+                showlegend: false
+            };
+            {% comment %}var trace8 = {
+                x: [1.5, 1.5, 1.5],
+                y: [2.25, 1.5, 0.75],
+                type: 'scatter',
+                mode: 'text',
+                text: ['Rack 1', 'Rack 2', 'Rack 3'],
+                textfont: {
+                    color: 'black',
+                    size: 18,
+                    family: 'Arial'
+                },
+                showlegend: false
+            };{% endcomment %}
+            var data = [trace5, trace6, trace7];
+            var layout = {
+                title: {
+                    text: 'Front View',
+                    font: {
+                        color: '#111',
+                        size: 20
+                    },
+                },
+                shapes: [
+                    {
+                        type: 'rect',
+                        xref: 'paper',
+                        yref: 'y',
+                        x0: 0,
+                        y0: 0,
+                        x1: 1,
+                        y1: -0.5,
+                        fillcolor: 'red',
+                        opacity: 0.2,
+                        line: {
+                            width: 0
+                        }
+                    },
+                    {
+                        type: 'rect',
+                        xref: 'paper',
+                        yref: 'y',
+                        x0: 0,
+                        y0: -0.5,
+                        x1: 1,
+                        y1: -1,
+                        fillcolor: 'orange',
+                        opacity: 0.2,
+                        line: {
+                            width: 0
+                        }
+                    },
+                    {
+                        type: 'rect',
+                        xref: 'paper',
+                        yref: 'y',
+                        x0: 0,
+                        y0: -1,
+                        x1: 1,
+                        y1: -1.5,
+                        fillcolor: 'yellow',
+                        opacity: 0.2,
+                        line: {
+                            width: 0
+                        }
+                    },
+                    {
+                        type: 'rect',
+                        xref: 'paper',
+                        yref: 'y',
+                        x0: 0,
+                        y0: -1.5,
+                        x1: 1,
+                        y1: -2,
+                        fillcolor: 'green',
+                        opacity: 0.2,
+                        line: {
+                            width: 0
+                        }
+                    },
+                    {
+                        type: 'rect',
+                        xref: 'paper',
+                        yref: 'y',
+                        x0: 0,
+                        y0: -2,
+                        x1: 1,
+                        y1: -2.5,
+                        fillcolor: 'blue',
+                        opacity: 0.2,
+                        line: {
+                            width: 0
+                        }
+                    },
+                    {
+                        type: 'rect',
+                        xref: 'paper',
+                        yref: 'y',
+                        x0: 0,
+                        y0: -2.5,
+                        x1: 1,
+                        y1: -3,
+                        fillcolor: 'purple',
+                        opacity: 0.2,
+                        line: {
+                            width: 0
+                        }
+                    },
+                ],
+                xaxis: {
+                    showticklabels: false,
+                    zeroline: false,
+                    showgrid: false,
+                    {% comment %}  showgrid: false,
+                      zeroline: false,
+                      showline: false,
+                      mirror: 'ticks',
+                      gridcolor: '#edeeef ',
+                      gridwidth: 0.5,
+                      zerolinecolor: '#969696',
+                      zerolinewidth: 4,
+                      linecolor: '#636363',
+                      autotick: false,
+                      ticks: 'outside',
+                      tick0: 0,
+                      dtick: 1,
+                      {#ticklen: 4,#}
+                      nticks: 3,
+                      tickwidth: 1,
+                      tickcolor: '#000'{% endcomment %}
+                },
+                yaxis: {
+                    showgrid: false,
+                    zeroline: false,
+                    showline: false,
+                    mirror: 'ticks',
+                    gridcolor: '#edeeef',
+                    gridwidth: 0.5,
+                    zerolinecolor: '#969696',
+                    zerolinewidth: 4,
+                    linecolor: '#636363',
+                    autotick: true,
+                    ticks: 'outside',
+                    tick0: 0,
+                    dtick: 0.25,
+                    fixedrange: true,
+                    range: [0, -3],
+                    ticklen: 4,
+                    tickwidth: 1,
+                    tickcolor: '#000',
+                    tickmode: "array",
+                    tickvals: [-0.25, -0.75, -1.25, -1.75, -2.25, -2.75],
+                    ticktext: ["L1", "L2", 'L3', 'L4', 'L5', "L6"],
+                },
+
+            };
+            Plotly.newPlot('myDiv4', data, layout);
+        }
+
+        overview_xz()
+
+        {#Overview function for xz ends here#}
+
+        function error_code() {
+            var arr = []
+            var vin = document.getElementById('vin').textContent
+            $("#params input[type='checkbox']:checked").each(function () {
+                console.log($(this).val())
+                arr.push($(this).val())
+            })
+            console.log(arr)
+            $.ajax({
+                method: "POST",
+                url: "api/data/error_code",
+                async: true,
+                data: {
+                    'csrfmiddlewaretoken': csrftoken,
+                    'params[]': arr,
+                    'vin': vin,
+                },
+                success: function (result, status, xhr) {
+                    console.log(result.message)
+                    document.getElementById('msg').textContent = result.message
+                    $('.toast').toast('show');
+                },
+                error: function (error_data) {
+                    console.log("error")
+                    alert("error")
+                    console.log(error_data)
+                }
+            })
+
+        }
+    </script>
+    <script>
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        const csrftoken = getCookie('csrftoken');
+    </script>
+    <script>
+        function changecolor(traceindex) {
+            var update = {
+                'marker.color': '#fe7701'
+            };
+            Plotly.restyle(myDiv, update, traceindex);
+            Plotly.restyle(myDivz, update, traceindex);
+        }
+
+        function changecolor_overview(traceindex) {
+            var update = {
+                'marker.color': '#fe7701'
+            };
+            Plotly.restyle(myDiv3, update, traceindex);
+            Plotly.restyle(myDiv4, update, traceindex);
+        }
+
+        function tracecolorchange() {
+            var inputid = document.getElementById("searchinput").value
+            console.log(inputid)
+            search_tag(inputid)
+            if (inputid === "D632") {
+                changecolor(4)
+                changecolor_overview(0)
+            } else if (inputid === "54B6") {
+                changecolor(5)
+                changecolor_overview(1)
+            } else if (inputid === "D70B") {
+                changecolor(6)
+                changecolor_overview(2)
+            }
+        }
+
+        function search_tag(tag) {
+            $.ajax({
+                method: "POST",
+                url: "api/data/searchtag",
+                async: true,
+                data: {
+                    'csrfmiddlewaretoken': csrftoken,
+                    'tag': tag,
+                },
+                success: function (result, status, xhr) {
+                    console.log(result.position)
+                    if (document.getElementById('xyz1').style.display === 'block') {
+                        document.getElementById("status").textContent = result.position;
+                    }
+                },
+                error: function (error_data) {
+                    console.log("error")
+                    alert("error")
+                    console.log(error_data)
+                }
+            })
+        }
+    </script>
+{% endblock javascripts %}

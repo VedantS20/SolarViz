@@ -1,0 +1,21 @@
+{% extends "layouts/base-error.html" %}
+
+{% block title %}Verify-Email{% endblock title %}
+
+{% block content %}
+
+    <div class="pos-a t-0 l-0 w-100 h-100 d-f fxd-r fxw-w ai-c jc-c pos-r p-30" style="background-color: #313131">
+        <div class="d-f jc-c fxd-c text-center">
+            <div class="mB-0">
+                <img alt="#" src="/static/assets/static/images/goldmmlogo.png" style="height: 40vh;">
+            </div>
+            <h3 class="mB-10 fsz-lg c-white-900 tt-c">Thank you For Registration</h3>
+            <p class="mB-30 fsz-def c-white-700">You have successfully created your account,<br>Please confirm your email
+                address to complete the registration</p>
+            <div>
+                <a href="/logout/" type="primary" class="btn btn-primary">Home</a>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

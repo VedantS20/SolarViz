@@ -1,0 +1,136 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Forms {% endblock title %}
+
+<!-- Specific CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <div class="row gap-20 masonry pos-r" style="height: 100vh">
+        <div class="masonry-sizer col-md-12"></div>
+        <div class="masonry-item col-md-12">
+            <div class="p-20 bd" style="background-color: #313131">
+                <h6 class="c-white-900">Firm Registration</h6>
+                <div class="mT-30">
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="inputEmail4">Company Name</label>
+                            <input type="text" class="form-control" id="inputcompanyName" placeholder="Company Name">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="inputEmail4">Company Email</label>
+                            <input type="text" class="form-control" id="inputemail" placeholder="Company Name">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="inputEmail4">Company Telephone</label>
+                            <input type="tel" class="form-control" id="inputtelephone"
+                                   placeholder="Company Telephone">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputAddress">Address</label>
+                        <input type="text" class="form-control" id="inputAddress" placeholder="Company Address..">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputAddress2">Address 2</label>
+                        <input type="text" class="form-control" id="inputAddress2"
+                               placeholder="Apartment, studio, or floor">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="inputCity">Country</label>
+                            <input type="text" class="form-control" id="inputCountry">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="inputCity">City</label>
+                            <input type="text" class="form-control" id="inputCity">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="inputState">State</label>
+                            {#                                <select id="inputState" class="form-control">#}
+                            {#                                    <option selected="selected">Choose...</option>#}
+                            {#                                    <option>...</option>#}
+                            {#                                </select>#}
+                            <input type="text" class="form-control" id="inputState">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="inputZip">Zip</label>
+                            <input type="text" class="form-control" id="inputZip">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="inputGSTno">GSTN</label>
+                            <input type="text" class="form-control" id="inputGSTno">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="inputState">Owner</label>
+                            {#                                <select id="inputState" class="form-control">#}
+                            {#                                    <option selected="selected">Choose Owner</option>#}
+                            {#                                    <option>...</option>#}
+                            {#                                </select>#}
+                            <input type="text" class="form-control" id="inputowner">
+                        </div>
+                    </div>
+                    <button onclick="register_firm()" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script>
+        function register_firm() {
+            $.ajax({
+                method: "POST",
+                url: "api/register/firm",
+                async: true,
+                data: {
+                    'csrfmiddlewaretoken': csrftoken,
+                    'name': $("#inputcompanyName").val(),
+                    'email': $("#inputemail").val(),
+                    'telephone': $("#inputtelephone").val(),
+                    'address1': $("#inputAddress").val(),
+                    'address2': $("#inputAddress2").val(),
+                    'country': $("#inputCountry").val(),
+                    'state': $("#inputState").val(),
+                    'city': $("#inputCity").val(),
+                    'zip': $("#inputZip").val(),
+                    'gstn': $("#inputGSTno").val(),
+                    'owner': $("#inputowner").val()
+                },
+                success: function (result, status, xhr) {
+                    console.log(result)
+                },
+                error: function (error_data) {
+                    console.log("error")
+                    alert("error")
+                    console.log(error_data)
+                }
+            })
+        }
+    </script>
+    <script>
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        const csrftoken = getCookie('csrftoken');
+    </script>
+{% endblock javascripts %}
