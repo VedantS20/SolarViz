@@ -13,7 +13,7 @@ from datetime import datetime, timedelta
 import pytz
 from app.operations import searchdata, getlivedata, getdevicedata, getreport, getmapreport, get_device_parameters, \
     get_all_data, get_livedata_device, get_anchortag, random_string, get_tag, get_solar_column_name, \
-    get_livedata_solar, search_solardata, solar_genration, get_live_weatherparam_data, get_tag_location
+    get_livedata_solar, search_solardata, solar_genration, get_live_weatherparam_data, get_tag_location,convert_to_Json
 from .decorators import *
 from .models import *
 from django.contrib.auth.models import User
@@ -157,9 +157,10 @@ def get_archive_data(request):
                 Time = time
                 # print(len(Yaxis[0]))
                 # print(len(Time))
+            
 
             context = {"fromData": fromData, "toData": toData, "labels": Time, "selected": Yaxis, "param": param1,
-                       "legends": params, "yaxislabel": param + weather}
+                       "legends": params, "yaxislabel": param + weather , "tableData":convert_to_Json(Time,params,Yaxis)}
 
         else:
             device = request.POST["device"]
@@ -181,6 +182,8 @@ def get_archive_data(request):
                             Time.append(temptimedate.strftime('%Y-%m-%d %H:%M:%S%z'))
                             for j in range(0, len(param)):
                                 Yaxis[j].append(None)
+            
+            
             context = {"fromData": fromData, "toData": toData, "labels": Time, "selected": Yaxis, "param": param, }
         # edt, vin, vbat, appt, tp, spdk, celv, ect, es = searchdata(fromData, toData,param)
 

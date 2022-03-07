@@ -425,6 +425,20 @@ def get_tag_location(x, y, z):
     return rack + "-" + bay + "-" + height
 
 
+
+def convert_to_Json(labels,legends,selected):
+    arr = []
+    for j in range(0,len(labels)):
+        obj = {}
+        obj['datetime'] = labels[j]
+        for i in range(0,len(legends)):
+            obj[legends[i]] = selected[i][j]
+        
+        arr.append(obj)
+    return arr
+
+
+
 if __name__ == "__main__":
     # print(get_device_parameters('$SLU355000082004871'))
     # # get_anchortag()
