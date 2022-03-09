@@ -330,7 +330,7 @@ def get_live_weatherparam_data():
 def get_solar_column_name(devicename):
     cnx = mysql.connector.connect(**config)
     cursor = cnx.cursor(buffered=True)
-    query = f"SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA`='ers' AND `TABLE_NAME`='{devicename}' ORDER BY ORDINAL_POSITION    "
+    query = f"SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA`='mytestdb' AND `TABLE_NAME`='{devicename}' ORDER BY ORDINAL_POSITION    "
     cursor.execute(query)
     col_name = []
     data = cursor.fetchall()
