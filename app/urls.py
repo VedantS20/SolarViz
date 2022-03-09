@@ -26,5 +26,7 @@ urlpatterns = [
     path('api/data/error_code', views.error_code, name="error_code"),
     path('3d', views.show_3d, name="3d"),
     path('api/data/searchtag', views.search_tag, name="searchtag"),
+   
+    
     re_path(r'^.*\.*', views.pages, name='pages'),
 ]
