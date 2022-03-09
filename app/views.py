@@ -41,13 +41,16 @@ def tempdevice(request):
     return JsonResponse(lines[0:1000], safe=False)
 
 
+
+
+
 @login_required(login_url="/login/")
 def get_live_data(request):
     arr = []
     dev = []
     weather = []
     if request.user.username == 'solar':
-        devicelist = ["SCB1", "SCB2", "SCB3", "inv_1"]
+        devicelist = ["mvps1_inv_a"]
         datalist = get_livedata_solar(devicelist)
         weatherdata = get_live_weatherparam_data()
         for d in devicelist:
@@ -114,8 +117,8 @@ def get_archive_data(request):
         # print(param)
         if request.user.username == 'solar':
             device = request.POST.getlist("device[]")
-            fromData = fromData.replace(day=23, month=1, year=2021)
-            toData = toData.replace(day=23, month=1, year=2021)
+            # fromData = fromData.replace(day=23, month=1, year=2021)
+            # toData = toData.replace(day=23, month=1, year=2021)
             Data = search_solardata(fromData, toData, param, device, weather)
             delay = 300
             param1 = []
@@ -421,7 +424,7 @@ def get_userinfo(request):
     pref = []
     chart_pref = []
     if request.user.username == 'solar':
-        devicelist = ["SCB1", "SCB2", "SCB3", "inv_1"]
+        devicelist = ["mvps1_inv_a"]
         for d in devicelist:
             pref.append(get_solar_column_name(d))
             chart_pref.append(get_solar_column_name(d)[1:])

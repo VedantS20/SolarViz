@@ -11,7 +11,7 @@ config = {
     "user": 'mmlink',
     "password": 'Mmlink@271020',
     "host": '139.59.28.3',
-    "database": 'mytestdb'
+    "database": 'ers'
 }
 
 
@@ -248,6 +248,8 @@ def get_tag(tag):
 #     return data
 
 
+
+
 def search_solardata(start, end, parameters, selecteddevice, weather):
     cnx = mysql.connector.connect(**config)
     cnx.time_zone = '+05:30'
@@ -256,7 +258,7 @@ def search_solardata(start, end, parameters, selecteddevice, weather):
     if len(parameters) != 0 and len(selecteddevice) != 0:
         parameters = "`,`".join(parameters)
         for device in selecteddevice:
-            query = f"SELECT Date,`{parameters}` FROM {device} WHERE Date BETWEEN '{start}' AND '{end}'"
+            query = f"SELECT TimeCol,`{parameters}` FROM {device} WHERE TimeCol BETWEEN '{start}' AND '{end}'"
             # print(query)
             cursor.execute(query)
             data.append(cursor.fetchall())
@@ -264,7 +266,7 @@ def search_solardata(start, end, parameters, selecteddevice, weather):
     #     data.append([])
     if len(weather) != 0:
         weather = "`,`".join(weather)
-        query1 = f"SELECT Date,`{weather}` FROM wms WHERE Date BETWEEN '{start}' AND '{end}'"
+        query1 = f"SELECT TimeCol,`{weather}` FROM wms WHERE TimeCol BETWEEN '{start}' AND '{end}'"
         cursor.execute(query1)
         data.append(cursor.fetchall())
 
@@ -292,7 +294,7 @@ def get_livedata_solar(device):
         # device_parameters = (",").join(get_solar_column_name(i))
         # print(device_parameters)
         # {'%s' + (',%s' * (len(get_solar_column_name(i)) - 1))}
-        query = f"SELECT * FROM {i} where Date = '{updateddate}'"
+        query = f"SELECT * FROM {i} where TimeCol = '{updateddate}'"
         cursor.execute(query)
         data = cursor.fetchone()
         data = list(data)
@@ -315,8 +317,8 @@ def get_live_weatherparam_data():
     elif int(datetime.now(IST).strftime('%M')) % 5 <= 5:
         date = datetime.now(IST) - timedelta(minutes=int(datetime.now(IST).strftime('%M')) % 5)
 
-    updateddate = "2021-01-23 " + date.strftime('%H:%M') + ":00"
-    query = f"SELECT * FROM wms where Date = '{updateddate}'"
+    updateddate = "2021-10-13 " + date.strftime('%H:%M') + ":00"
+    query = f"SELECT * FROM wms where TimeCol = '{updateddate}'"
     cursor.execute(query)
     datalist = cursor.fetchone()
     datalist = list(datalist)
@@ -328,12 +330,14 @@ def get_live_weatherparam_data():
 
 # to get the parameter names of device
 def get_solar_column_name(devicename):
+    
     cnx = mysql.connector.connect(**config)
     cursor = cnx.cursor(buffered=True)
-    query = f"SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA`='mytestdb' AND `TABLE_NAME`='{devicename}' ORDER BY ORDINAL_POSITION    "
+    query = f"SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA`='ers' AND `TABLE_NAME`='{devicename}' ORDER BY ORDINAL_POSITION"
     cursor.execute(query)
     col_name = []
     data = cursor.fetchall()
+    print(data)
     # [('Date',), ('STB 2.2.2 - 1 - I1 [A]',), ('STB 2.2.2 - 1 - I10 [A]',), ('STB 2.2.2 - 1 - I11 [A]',), ('STB 2.2.2 - 1 - I12 [A]',), ('STB 2.2.2 - 1 - I13 [A]',), ('STB 2.2.2 - 1 - I14 [A]',), ('STB 2.2.2 - 1 - I15 [A]',), ('STB 2.2.2 - 1 - I16 [A]',), ('STB 2.2.2 - 1 - I2 [A]',), ('STB 2.2.2 - 1 - I3 [A]',), ('STB 2.2.2 - 1 - I4 [A]',), ('STB 2.2.2 - 1 - I5 [A]',), ('STB 2.2.2 - 1 - I6 [A]',), ('STB 2.2.2 - 1 - I7 [A]',), ('STB 2.2.2 - 1 - I8 [A]',), ('STB 2.2.2 - 1 - I9 [A]',), ('STB 2.2.2 - 1 - Total power [W]',), ('STB 2.2.2 - 1 - Total voltage [V]',)]
     for d in range(0, len(data)):
         # print(d[0])
