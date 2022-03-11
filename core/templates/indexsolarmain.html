@@ -86,6 +86,13 @@
                                     style="margin-top: 10px;">
                           
                                 <option value="mvps1_inv_a">mvps1_inv_a</option>
+                                <option value="mvps4_inv_b">mvps4_inv_b</option>
+                                <option value="mvps5_inv_a">mvps5_inv_a</option>
+                                <option value="mvps5_inv_b">mvps5_inv_b</option>
+                                <option value="mvps6_inv_a">mvps6_inv_a</option>
+                                <option value="mvps6_inv_b">mvps6_inv_b</option>
+                                <option value="mvps7_inv_a">mvps7_inv_a</option>
+                                <option value="mvps7_inv_b">mvps7_inv_b</option>
                             </select>
                         </div>
                         <div class="col-md-3 col-lg-2" style="margin-top: 10px;">
@@ -736,9 +743,7 @@ function showChart(res){
     table = new Tabulator("#chart-table", {
     layout:"fitColumns",
     height:"311px",
-    pagination:true,
-    paginationSize:10,
-    paginationSizeSelector:[10, 25, 50, 100],
+   
     data:res,
     columns:cols
 })

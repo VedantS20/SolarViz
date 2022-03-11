@@ -50,7 +50,7 @@ def get_live_data(request):
     dev = []
     weather = []
     if request.user.username == 'solar':
-        devicelist = ["mvps1_inv_a"]
+        devicelist = ["mvps1_inv_a","mvps4_inv_b","mvps5_inv_a","mvps5_inv_b","mvps6_inv_b","mvps6_inv_a","mvps7_inv_a","mvps7_inv_b"]
         datalist = get_livedata_solar(devicelist)
         weatherdata = get_live_weatherparam_data()
         for d in devicelist:
@@ -424,7 +424,7 @@ def get_userinfo(request):
     pref = []
     chart_pref = []
     if request.user.username == 'solar':
-        devicelist = ["mvps1_inv_a"]
+        devicelist = ["mvps1_inv_a","mvps4_inv_b","mvps5_inv_a","mvps5_inv_b","mvps6_inv_a","mvps6_inv_b","mvps7_inv_a","mvps7_inv_b"]
         for d in devicelist:
             pref.append(get_solar_column_name(d))
             chart_pref.append(get_solar_column_name(d)[1:])
