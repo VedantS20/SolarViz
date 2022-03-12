@@ -1,61 +1,62 @@
 {% extends "layouts/base-fullscreen.html" %}
 
-{% block title %} Login {% endblock title %}
+{% block title %} Login {% endblock %}
 
-{% block stylesheets %}{% endblock stylesheets %}
+{% block content %}   
 
-{% block content %}
-
-    <div class="col-12  pX-40 pY-150 scrollable pos-r centerXY" style="min-width: 320px; background-color: #313131">
-        <div class="pos-r p-20 mB-100 ">
-            <img class="p-20 pos-a centerXY" style="height: 30vh" src="/static/assets/static/images/pngegg.png"
-                 alt="">
-        </div>
-        <div class="pos-r p-20">
-                 <h2 class ="p-20 pos-a centerXY" >Solar Visualizer</h2>
-        </div>
-        <form method="post" action="">
-
-            {% csrf_token %}
-
-            <div class="form-group col-md-4 centerX">
-                <label class="text-normal text-white">Username</label>
-                {{ form.username }}
+    <div class="auth-wrapper">
+        <div class="auth-content">
+            <div class="auth-bg">
+                <span class="r"></span>
+                <span class="r s"></span>
+                <span class="r s"></span>
+                <span class="r"></span>
             </div>
-
-            <div class="form-group col-md-4 centerX">
-                <label class="text-normal text-white">Password</label>
-                {{ form.password }}
-            </div>
-
-            <div class="form-group col-md-4 centerX">
-                <div class="peers ai-c jc-sb fxw-nw">
-                    <div class="peer">
-                        <button type="submit" name="login" class="btn btn-primary">Login</button>
-
-                        &nbsp;
-                        <span class="text-small font-weight-semibold">username - solar and password - abcd@1234</span>
-                        <!-- <a href="{% url 'register' %}" class="text-blue text-small">Register</a> -->
+            <div class="card">
+                <div class="card-body text-center">
+                    <div class="mb-4">
+                        <i class="feather icon-unlock auth-icon"></i>
                     </div>
+                    <h3 class="mb-4">Login</h3>
+
+                    <span class="mb-0 text-muted">
+                        {% if msg %}
+                            {{ msg | safe }}
+                        {% else %}
+                            Add your credentials
+                        {% endif %} 
+                    </span>
+
+                    <br />
+                    <br />
+
+                    <form role="form" method="post" action="">
+
+                        {% csrf_token %}                   
+
+                        <div class="input-group mb-3">
+                            {{ form.username }}
+                        </div>
+                        
+                        <div class="input-group mb-4">
+                            {{ form.password }}
+                        </div>
+                        
+                        <div class="form-group text-left">
+                            <div class="checkbox checkbox-fill d-inline">
+                                <input type="checkbox" name="checkbox-fill-1" id="checkbox-fill-a1" checked="">
+                                <label for="checkbox-fill-a1" class="cr"> Save Details</label>
+                            </div>
+                        </div>
+                        <button type="submit" name="login" class="btn btn-primary shadow-2 mb-4">Login</button>
+
+                    </form>
+
+                    <p class="mb-0 text-muted">Don’t have an account? <a href="{% url 'register' %}" >Sign UP</a></p>
+                    
                 </div>
             </div>
-        </form>
-        {% if msg %}
-            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="30000" style="background-color: #FFCCCC;position: absolute; bottom:5% ; right: 5%;  ">
-                <div class="toast-body" style="color: #ff0033; font-weight: 600; font-size: medium;">
-                    <img src="/static/assets/static/images/ban.png" height="20px" width="20px" class="rounded mr-2 mb-1" alt="...">
-                    {{ msg|safe }}
-                    <button type="button" class="ml-3 mb-1 close" data-dismiss="toast" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            </div>
-        {% else %}
-        {% endif %}
-    </div>
+        </div>
     </div>
 
 {% endblock content %}
-{% block javascripts %}
-    <script>$('.toast').toast('show')</script>
-{% endblock javascripts %}

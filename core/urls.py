@@ -12,7 +12,6 @@ from django.conf import settings
 urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
     path('admin/', admin.site.urls),  # Django admin route
     path("", include("authentication.urls")),  # Auth routes - login / register
-    path("", include("userforms.urls")),
-    path("", include("reports.urls")),
+   
     path("", include("app.urls")),  # UI Kits Html files
 ]

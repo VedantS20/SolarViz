@@ -1,0 +1,222 @@
+{% extends "layouts/base.html" %} {% block title %} Forms {% endblock title %}
+
+<!-- Specific CSS goes HERE  -->
+{% block stylesheets %}
+<style>
+  .config-form {
+    color: black;
+    
+  }
+  .form-check .form-check-label{
+    font-size: 1.5rem;
+    margin-left: 1rem;
+  }
+
+  .form-check-input{
+    height: 1.5rem;
+    width: 1.5rem;
+  }
+  .list{
+    max-height: 29rem;
+    overflow-y: scroll;
+  }
+</style>
+{% endblock stylesheets %} {% block content %}
+
+<div class="row gap-20 masonry pos-r config-form">
+  <div class="masonry-sizer col-md-6"></div>
+  <div class="masonry-item col-md-6">
+    <div class="bgc-white p-20 bd">
+      <h6 class="c-grey-900">Connect Database</h6>
+      <div class="mT-30">
+        <form id="dbconnect" type="POST">
+          <div class="form-group">
+            <label for="exampleInputEmail1">Host Name</label>
+            <input
+              type="text"
+              class="form-control"
+              id="hostname"
+              aria-describedby="emailHelp"
+              placeholder="Enter Host Name"
+            />
+          </div>
+          <div class="form-group">
+            <label for="exampleInputEmail1">IP Address</label>
+            <input
+              type="text"
+              class="form-control"
+              id="exampleInputEmail1"
+              aria-describedby="emailHelp"
+              placeholder="Enter IP Address"
+            />
+            <small id="textHelp" class="form-text font-weight-bold"
+              >If Database is in Local Environment then Enter 127.0.0.1</small
+            >
+          </div>
+          <div class="form-group">
+            <label for="exampleInputEmail1">Database Name</label>
+            <input
+              type="text"
+              class="form-control"
+              id="dbname"
+              aria-describedby="emailHelp"
+              placeholder="Enter Database Name"
+            />
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1">Password</label>
+            <input
+              type="password"
+              class="form-control"
+              id="exampleInputPassword1"
+              placeholder="Password"
+            />
+          </div>
+          <button type="submit" class="btn btn-primary">Test</button>
+          <h4 class="ml-5 d-inline font-weight-bold message"></h4>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="masonry-item table-list-container col-md-6 d-none">
+    <div class="bgc-white p-20 bd list">
+      <h6 class="c-grey-900">Select Tables</h6>
+      <div class="mT-30 table-list">
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="defaultCheck1"
+          />
+          <label class="form-check-label" for="defaultCheck1">
+            Default checkbox
+          </label>
+        </div>
+        </div>
+        <button id="save-list" class="btn btn-primary">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script>
+  let config =  {};
+  document.querySelector("#dbconnect").addEventListener("submit", (e) => {
+    e.preventDefault();
+    console.log(e.target[0].value);
+    console.log(e.target[1].value);
+    console.log(e.target[2].value);
+    console.log(e.target[3].value);
+    config = {
+      user: e.target[0].value,
+      password: e.target[3].value,
+      host: e.target[1].value,
+      database: e.target[2].value,
+    };
+    console.log(config);
+    $.ajax({
+      method: "POST",
+      url: "solar/testdb",
+      async: true,
+      data: {
+        csrfmiddlewaretoken: csrftoken,
+        user: e.target[0].value,
+        password: e.target[3].value,
+        host: e.target[1].value,
+        database: e.target[2].value,
+      },
+      success: function (result, status, xhr) {
+        if (result.message === "Database Connected Successfully!") {
+          document.querySelector(".message").classList.remove("text-danger");
+          document.querySelector(".message").classList.add("text-success");
+          document.querySelector(".message").textContent = result.message;
+          document.querySelector(".table-list-container").classList.remove("d-none")
+          for(t of result.table){
+              document.querySelector('.table-list').innerHTML += `<div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=${t}
+            id='list'
+          />
+          <label class="form-check-label">
+            ${t}
+          </label>
+        </div>`
+          }
+        } else {
+          document.querySelector(".message").classList.remove("text-success");
+          document.querySelector(".message").classList.add("text-danger");
+          document.querySelector(".message").textContent = result.message;
+        }
+
+        console.log(result.message);
+      },
+      error: function (error_data) {
+        console.log("error");
+        alert("error");
+        document.querySelector(".message").classList.add("text-danger");
+        document.querySelector(".message").textContent = "Wrong IP Address";
+        console.log(error_data);
+      },
+    });
+  });
+  document.querySelector('#save-list').addEventListener('click',()=>{
+    let checkedTableList = []
+      let t = document.querySelectorAll('#list').forEach((v)=>{
+        if(v.checked){
+          checkedTableList.push(v.value)
+        }
+      })
+      console.log(checkedTableList);
+      console.log(config);
+      $.ajax({
+      method: "POST",
+      url: "solar/table-list",
+      async: true,
+      data: {
+        csrfmiddlewaretoken: csrftoken,
+        "checkedTables[]": checkedTableList,
+        'user': config['user'],
+        'password': config['password'],
+        'host': config['host'],
+        'database': config['database']
+      },
+      success: function (result, status, xhr) {
+        alert(result.message)
+      },
+      error: function (error_data) {
+        console.log("error");
+        alert("error");
+        console.log(error_data);
+      },
+    });
+  })
+</script>
+<script>
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+      const cookies = document.cookie.split(";");
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        // Does this cookie string begin with the name we want?
+        if (cookie.substring(0, name.length + 1) === name + "=") {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
+  const csrftoken = getCookie("csrftoken");
+</script>
+
+{% endblock javascripts %}

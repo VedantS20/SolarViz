@@ -30,7 +30,7 @@
 
 {% block content %}
     <div class="row gap-20 masonry pos-r">
-     
+        
         <div class="masonry-sizer col-md-6"></div>
        
         <div class="masonry-item col-md-12">
@@ -70,29 +70,22 @@
                             </div>
                         </div>
                     </div>
-                    <div id="selectelements" class="row justify-content-around">
-                        <!-- <select id="selectplant" name="Select Plant" class="custom-select col-md-3 col-lg-2 "
-                                style="margin-top: 10px; text-align-last: center ">
-                            <option value="none" selected disabled hidden>
-                                Select Plant
-                            </option>
-                            {% for i in device %}
-                                <option value="{{ i.device_id }}">{{ i.device_id }}</option>
-                            {% endfor %}
-                        </select> -->
-                     
+                 
+                    <div id="selectelements" class="row justify-content-around">       
                         <div class="col-md-3 col-lg-2" style="margin-top: 10px;">
                             <select id="selectdevice" multiple="multiple"
                                     style="margin-top: 10px;">
-                          
-                                <option value="mvps1_inv_a">mvps1_inv_a</option>
+                                {%for d in devicelist%}
+                                <option value={{d}}>{{d}}</option>
+                                {%endfor%}
+                                <!-- <option value="mvps1_inv_a">mvps1_inv_a</option>
                                 <option value="mvps4_inv_b">mvps4_inv_b</option>
                                 <option value="mvps5_inv_a">mvps5_inv_a</option>
                                 <option value="mvps5_inv_b">mvps5_inv_b</option>
                                 <option value="mvps6_inv_a">mvps6_inv_a</option>
                                 <option value="mvps6_inv_b">mvps6_inv_b</option>
                                 <option value="mvps7_inv_a">mvps7_inv_a</option>
-                                <option value="mvps7_inv_b">mvps7_inv_b</option>
+                                <option value="mvps7_inv_b">mvps7_inv_b</option> -->
                             </select>
                         </div>
                         <div class="col-md-3 col-lg-2" style="margin-top: 10px;">
@@ -118,7 +111,7 @@
                     </div>
                 </div>
                 <div class="mT-30">
-                    <div id="line-chart" style="display: block;width: 90vw; height: 60vh"></div>
+                    <div id="line-chart" style="display: block;width: 90vw; height: 75vh"></div>
                     <!-- <canvas id="scatter-chart" height="100" style="display: block;margin-top: 10px;">
                     </canvas> -->
                 </div>
@@ -153,26 +146,6 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 
     <script>
-        var indexofselecteddevice = -1;
-        var endpoint = '/api/data/live'
-        // const livedata2 = function () {
-        //     $.ajax({
-        //         method: "GET",
-        //         url: endpoint,
-        //         success: function (data) {
-        //             var Consumption = document.getElementById("consumption")
-        //             var SolarGenration = document.getElementById("solar_genration");
-        //             var ExporttoGrid = document.getElementById("export_to_grid");
-              
-        //             let c = parseInt(data.data[data.data.length - 1]["Energy generated per day (Inv 5.1) [kWh]"]) * 0.8
-        //             let e = parseInt(data.data[data.data.length - 1]["Energy generated per day (Inv 5.1) [kWh]"]) * 0.2
-        //             Consumption.textContent = c.toFixed(2).toString();
-        //             SolarGenration.textContent = data.data[data.data.length - 1]["Energy generated per day (Inv 5.1) [kWh]"];
-        //             ExporttoGrid.textContent = e.toFixed(2).toString();
-        //         }
-        //     })
-        // }
-        // livedata2()
     </script>
     <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-matrix@0.1.3/dist/chartjs-chart-matrix.min.js"></script>
@@ -191,6 +164,7 @@
             integrity="sha512-2JBCbWoMJPH+Uj7Wq5OLub8E5edWHlTM4ar/YJkZh3plwB2INhhOC3eDoqHm1Za/ZOSksrLlURLoyXVdfQXqwg=="
             crossorigin="anonymous"></script>
     <script src="/static/assets/jQuery-Multiple-Select-Plugin-For-Bootstrap-Bootstrap-Multiselect/dist/js/bootstrap-multiselect.min.js"></script>
+
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -598,8 +572,8 @@
          
             var layout = {
                 legend: {
-                    x: 0.3,
-                    y: 1.1,
+                    x: 0,
+                    y: 1.5,
                     "orientation": "h",
                     font: {
                         family: 'sans-serif',
@@ -758,7 +732,7 @@ document.getElementById("csv").addEventListener("click", function(){
 document.getElementById("xlsx").addEventListener("click", function(){
     table.download("xlsx", "data.xlsx", {sheetName:"My Data"});
     table = undefined;
-    // location.reload()
+
 });
 
 //trigger download of data.pdf file
@@ -768,7 +742,7 @@ document.getElementById("pdf").addEventListener("click", function(){
         title:"Solar Report", //add title to report
     });
     table = undefined;
-    // location.reload()
+
 });
 }
 
