@@ -32,8 +32,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'app',
-    'userforms',
-    'reports',
     'chartjs',
     'corsheaders',
 ]
@@ -78,12 +76,8 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'mytestdb',
-        'USER': 'mmlink',
-        'PASSWORD': 'Mmlink@271020',
-        'PORT': 3306,
-        'HOST': '139.59.28.3',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
