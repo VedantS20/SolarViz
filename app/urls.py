@@ -26,6 +26,9 @@ urlpatterns = [
     path('api/data/error_code', views.error_code, name="error_code"),
     path('3d', views.show_3d, name="3d"),
     path('api/data/searchtag', views.search_tag, name="searchtag"),
+    path('solar/testdb', views.solar_db_check, name="solar_check"),
+    path('solar/table-list', views.store_table_list, name="solar_check"),
+    
    
     
     re_path(r'^.*\.*', views.pages, name='pages'),

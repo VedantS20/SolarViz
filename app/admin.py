@@ -3,6 +3,7 @@
 Copyright (c) 2019 - present AppSeed.us
 """
 
+from atexit import register
 from django.contrib import admin
 from .models import *
 
@@ -15,3 +16,5 @@ admin.site.register(UserProfile)
 admin.site.register(FirmProfile)
 admin.site.register(StationReport)
 admin.site.register(TagAssign, TagAssignAdmin)
+admin.site.register(SolarDBConfig)
+    

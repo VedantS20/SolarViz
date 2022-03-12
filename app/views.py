@@ -3,6 +3,8 @@
 Copyright (c) 2019 - present AppSeed.us
 """
 
+from distutils.command.config import config
+from email import message
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template import loader
@@ -13,24 +15,26 @@ from datetime import datetime, timedelta
 import pytz
 from app.operations import searchdata, getlivedata, getdevicedata, getreport, getmapreport, get_device_parameters, \
     get_all_data, get_livedata_device, get_anchortag, random_string, get_tag, get_solar_column_name, \
-    get_livedata_solar, search_solardata, solar_genration, get_live_weatherparam_data, get_tag_location,convert_to_Json
+    get_livedata_solar, search_solardata, solar_genration, get_live_weatherparam_data, get_tag_location,convert_to_Json,connectToDB
 from .decorators import *
 from .models import *
 from django.contrib.auth.models import User
 from userforms.models import *
 import os
+import ast
 from django.conf import settings
 
 
+
+# @allowed_users(allowed_roles=['sysadmin', 'owner'])
+# @verified_users()
 @login_required(login_url="/login/")
-@allowed_users(allowed_roles=['sysadmin', 'owner'])
-@verified_users()
 def index(request):
     print(request.user.username)
-    device = Device.objects.filter(firm=FirmProfile.objects.get(user=User.objects.get(username=request.user.username)))
-    get_all_data(device)
-    context = {'device': device}
-    return render(request, "indexsolar.html", context)
+
+    devicelist = ast.literal_eval(SolarDBConfig.objects.get().selectedTables)
+    context = {"devicelist":devicelist}
+    return render(request, "indexsolarmain.html", context)
 
 
 @login_required(login_url="/login/")
@@ -117,9 +121,13 @@ def get_archive_data(request):
         # print(param)
         if request.user.username == 'solar':
             device = request.POST.getlist("device[]")
-            # fromData = fromData.replace(day=23, month=1, year=2021)
-            # toData = toData.replace(day=23, month=1, year=2021)
-            Data = search_solardata(fromData, toData, param, device, weather)
+            SolarData = SolarDBConfig.objects.get()
+            config = {}
+            config['user'] = SolarData.user
+            config['host'] = SolarData.host
+            config['database'] = SolarData.database
+            config['password'] = SolarData.password
+            Data = search_solardata(config,fromData, toData, param, device, weather)
             delay = 300
             param1 = []
             params = []
@@ -395,6 +403,9 @@ def error_code(request):
         return JsonResponse({"message": msg})
 
 
+
+
+
 @login_required(login_url="/login/")
 def pages(request):
     context = {"1": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
@@ -424,10 +435,17 @@ def get_userinfo(request):
     pref = []
     chart_pref = []
     if request.user.username == 'solar':
-        devicelist = ["mvps1_inv_a","mvps4_inv_b","mvps5_inv_a","mvps5_inv_b","mvps6_inv_a","mvps6_inv_b","mvps7_inv_a","mvps7_inv_b"]
+        SolarData = SolarDBConfig.objects.get()
+        devicelist = ast.literal_eval(SolarData.selectedTables)
+        config = {}
+        config['user'] = SolarData.user
+        config['host'] = SolarData.host
+        config['database'] = SolarData.database
+        config['password'] = SolarData.password
+        # devicelist = ["mvps1_inv_a","mvps4_inv_b","mvps5_inv_a","mvps5_inv_b","mvps6_inv_a","mvps6_inv_b","mvps7_inv_a","mvps7_inv_b"]
         for d in devicelist:
-            pref.append(get_solar_column_name(d))
-            chart_pref.append(get_solar_column_name(d)[1:])
+            pref.append(get_solar_column_name(config,d))
+            chart_pref.append(get_solar_column_name(config,d)[1:])
     else:
         device = Device.objects.filter(
             firm=FirmProfile.objects.get(user=User.objects.get(username=request.user.username)))
@@ -437,6 +455,44 @@ def get_userinfo(request):
             chart_pref.append(i.chart_parameters.split(","))
     context = {"all_devices": devicelist, "prefrence": pref, "chartprefrence": chart_pref}
     return JsonResponse(context)
+
+
+@login_required(login_url="/login/")
+def solar_db_check(request):
+    if request.method == 'POST':
+        config = {}
+        print(request.POST['user'])
+        print(request.POST['database'])
+        print(request.POST['host'])
+        print(request.POST['password'])
+        config['user'] = request.POST['user']
+        config['host'] = request.POST['host']
+        config['database'] = request.POST['database']
+        config['password'] = request.POST['password']
+        res = connectToDB(config)
+        
+        return JsonResponse(res)
+
+
+@login_required(login_url="/login/")
+def store_table_list(request):
+    if request.method == 'POST':
+        t = request.POST.getlist('checkedTables[]')
+        user = request.POST['user']
+        host = request.POST['host']
+        database = request.POST['database']
+        password = request.POST['password']
+        print(t)
+        message = ''
+        if(len(t)!=0):
+            tables = SolarDBConfig(selectedTables=t,host=host,user = user,database=database,password=password)
+            tables.save()
+            message = "Table List Saved Succesfully !"
+        else:
+            message = "Cannot Save Empty Table List !"
+        return JsonResponse({"message":message})
+
+
 
 
 def firm_register(request):

@@ -73,3 +73,15 @@ class TagAssign(models.Model):
 
     def __str__(self):
         return self.tag_id
+
+
+class SolarDBConfig(models.Model):
+    id = models.IntegerField(default=1,null=False,primary_key=True)
+    selectedTables = models.CharField(max_length=1000,blank=True,null=True)
+    host = models.CharField(max_length=50,blank=True,null=True)
+    user = models.CharField(max_length=50,blank=True,null=True)
+    database = models.CharField(max_length=50,blank=True,null=True)
+    password = models.CharField(max_length=50,blank=True,null=True)
+
+    def __str__(self):
+        return self.host
